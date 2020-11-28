@@ -12,9 +12,19 @@ void onReload(CRules@ this)
 	getMap().RemoveAllSectors();
 
 	@handler = SectorHandler();
+
 	handler.AddNewEvent(
-		SectorEvent(HelloWorld, Vec2f(95, 419), Vec2f(184, 471), null, false)
+		SectorEvent(HelloWorld, Vec2f(95, 419), Vec2f(184, 471))
 	);
+
+	handler.AddNewEvent(
+		SectorEvent(HelloWorld, Vec2f(260, 410), Vec2f(411, 469), false)
+	);
+
+	handler.AddNewEvent(
+		SectorEvent(HelloWorld, Vec2f(474, 410), Vec2f(617, 466), BombCheck, false)
+	);
+
 }
 
 void HelloWorld(CBlob@ caller)
@@ -22,9 +32,16 @@ void HelloWorld(CBlob@ caller)
 	server_CreateBlob("chicken", -1, caller.getPosition());
 }
 
-bool ShouldCall()
+bool BombCheck(CBlob@ caller)
 {
-	return true;
+	CBlob@ blob = caller.getAttachments().getAttachmentPointByName("PICKUP").getOccupied();
+
+	if (blob !is null && blob.getName() == "mat_bombs")
+	{
+		return true;
+	}
+
+	return false;
 }
 
 void onTick(CRules@ this)
@@ -38,8 +55,17 @@ void onTick(CRules@ this)
 	handler.OnTick(blob);
 }
 
+void onRender(CRules@ this)
+{
+	GUI::DrawText("One time use event", getDriver().getScreenPosFromWorldPos(Vec2f(115, 400)), SColor(255,255,255,255));
 
-class SectorEvent : Event
+	GUI::DrawText("Infinite use event", getDriver().getScreenPosFromWorldPos(Vec2f(300, 400)), SColor(255,255,255,255));
+
+	GUI::DrawText("Event with condition check", getDriver().getScreenPosFromWorldPos(Vec2f(520, 400)), SColor(255,255,255,255));
+}
+
+
+class SectorEvent : Event	
 {
 	// Map sector, we don't want external sources messing with this
 	private CMap::Sector@ EventSector;
@@ -52,6 +78,11 @@ class SectorEvent : Event
 	{
 		@EventSector = getMap().server_AddSector(topLeft, botRight, id + '');
 		Event(mainEvent, checkEvent, removeAfterUse);
+	}
+
+	SectorEvent(EventFunc@ mainEvent, Vec2f topLeft, Vec2f botRight, bool removeAfterUse = true, PreEventCheck@ checkEvent = null)
+	{
+		this = SectorEvent(mainEvent, topLeft, botRight, checkEvent, removeAfterUse);
 	}
 
 	void SetNewSector(CMap::Sector@ newSector, bool removeOld = true)
