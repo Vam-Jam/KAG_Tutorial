@@ -17,6 +17,18 @@ void onRestart(CRules@ this)
 {
 	RegisterFileExtensionScript("Scripts/MapLoaders/LoadPNGMap.as", "png");
 	AddMapScript();
+
+	RespawnAll(this);
+}
+
+void RespawnAll(CRules@ this)
+{
+	for (int a = 0; a < getPlayerCount(); a++)
+	{
+		CPlayer@ player = getPlayer(a);
+		if (player !is null)
+			onPlayerRequestSpawn(this, player);
+	}
 }
 
 void AddMapScript()
@@ -26,6 +38,11 @@ void AddMapScript()
 	mapName = mapName.substr(0,mapName.length() - 4);
 
 	getMap().AddScript(mapName);
+}
+
+void onNewPlayerJoin( CRules@ this, CPlayer@ player )
+{
+	player.server_setTeamNum(0);
 }
 
 void onPlayerRequestSpawn(CRules@ this, CPlayer@ player)
@@ -57,16 +74,23 @@ CBlob@ Respawn(CRules@ this, CPlayer@ player)
 
 Vec2f getSpawnLocation(CPlayer@ player)
 {
-	if (player is null || getMap() is null) { return Vec2f(0,0); }
+	CMap@ map = getMap();
+	if (player is null || map is null) { return Vec2f(0,0); }
+	
 	Vec2f[] spawns;
 
-	if (getMap().getMarkers("blue spawn", spawns))
+	switch (player.getTeamNum())
 	{
-		return spawns[ XORRandom(spawns.length) ];
-	}
-	else if (getMap().getMarkers("blue main spawn", spawns))
-	{
-		return spawns[ XORRandom(spawns.length) ];
+		case 0:
+		{
+			if (!map.getMarkers("blue spawn", spawns) && 
+				!map.getMarkers("blue main spawn", spawns))
+			{
+				return Vec2f_zero;
+			}
+
+			return spawns[XORRandom(spawns.length)];
+		}
 	}
 
 	return Vec2f(0, 0);
