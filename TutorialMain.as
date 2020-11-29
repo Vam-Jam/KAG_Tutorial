@@ -26,6 +26,7 @@ void RespawnAll(CRules@ this)
 	for (int a = 0; a < getPlayerCount(); a++)
 	{
 		CPlayer@ player = getPlayer(a);
+		
 		if (player !is null)
 			onPlayerRequestSpawn(this, player);
 	}

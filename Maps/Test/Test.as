@@ -1,3 +1,7 @@
+//////////////////////
+/// TEST MAP
+/// THIS CODE MAY OR MAY NOT WORK
+
 #include "EventSector"
 
 SectorHandler@ handler;
