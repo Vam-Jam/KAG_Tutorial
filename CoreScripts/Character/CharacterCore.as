@@ -9,13 +9,16 @@
 ////
 ///////////////////////////////////////////////////////////
 
-#include "EventSector"
-
-SectorHandler@ handler;
 Character@ char;
 
 void onInit(CRules@ this)
 {
+	//AddColorToken("$RED$", SColor(255, 105, 25, 5));
+	//AddColorToken("$GREEN$", SColor(255, 5, 105, 25));
+	//AddColorToken("$GREY$", SColor(255, 195, 195, 195)); // MOVE TO CORRECT PLACE
+	AddColorToken("$WHITE$", SColor(255, 255, 255, 255));
+	AddColorToken("$RED2$", SColor(255, 255, 0, 0));
+	AddIconToken("$KAG_ANGRY$", "kag_angry.png", Vec2f(16, 16), 0);
 	onRestart(this);
 }
 
@@ -26,12 +29,6 @@ void onRestart(CRules@ this)
 
 void onTick(CRules@ this)
 {
-	CBlob@ blob = getLocalPlayerBlob();
-	if ( handler is null || blob is null)
-		return;
-		
-	handler.OnTick(blob);
-
 	if (char is null || char.currentText == "" )
 		return;
 	char.UpdateText();	
@@ -50,17 +47,13 @@ void onReload(CRules@ this)
 {
 	getMap().RemoveAllSectors();
 	@char = Character();
-	@handler = SectorHandler();
-
-	handler.AddNewEvent(
-		SectorEvent(shitflute, Vec2f(535.098, 554.672), Vec2f(560.477, 575.501), true)
-	);
+	shitflute(null);
 }
 
 void shitflute(CBlob@ caller)
 {
-	print("shuo");
-	char.AddResponse("ok", "Say what you will about the Archer class, but I for one am glad they exist. I was born with a disability that means I \nonly have 1 finger on each hand. THD was extremely considerate to provide a class I can win with even \nwith this disability, very inclusive. \n\nOh also my disability left me blind and with only 3 brain cells but Archer allows me to get a high kdr rank. \nThank you THD for caring for the disabled like me");
+	GUI::SetFont("menu");
+	char.AddResponse("ok", "Say what you will about the $RED2$Archer$WHITE$ class, but I for one am glad they exist. I was born with a disability that means I only have 1 finger on each hand. THD was extremely considerate to provide a class I can win with even with this disability, very inclusive. \n\nOh also my disability left me blind and with only 3 brain cells but Archer allows me to get a high kdr rank. Thank you THD for caring for the disabled like me");
 	char.SetCurrentResponse("ok");
 }
 
@@ -107,7 +100,26 @@ class Character
 	{
 		if (getGameTime() % writeSpeed == 0)
 		{
-			currentRenderText += currentText.substr(currentRenderText.length, 1);
+			string char = currentText.substr(currentRenderText.length, 1);
+
+			// Grab the full token so users dont see a part of it when reading
+			if (char == '$') 
+			{
+				for (int a = currentRenderText.length + 1; a < currentText.length; a++)
+				{
+					string currentchar = currentText.substr(a, 1);
+					char += currentchar;
+
+					if (currentchar == "$") 
+					{
+						// Add in the next char so adding a token doesnt waste a text update
+						currentchar = currentText.substr(a + 1, 1);
+						break;
+					}
+				}
+			}
+
+			currentRenderText += char;
 		}
 	}
 
@@ -125,7 +137,7 @@ class Character
 
         leftX += hardValue;
         GUI::DrawRectangle(Vec2f(leftX, topY), Vec2f(leftX + hardValue + 500, topY + hardValue), SColor(150,0,0,0));
-        GUI::DrawText(currentRenderText, Vec2f(leftX + 25, topY + 25), SColor(255,255,255,255));
+        GUI::DrawText(currentRenderText, Vec2f(leftX + 25, topY + 10), Vec2f(leftX + hardValue + 475, topY + hardValue), SColor(255, 255, 255, 255), false, false, false);
 	}
 
 	void TempCharacterBind()
