@@ -7,38 +7,38 @@
 // Returns true if spawning was done correctly
 bool AddSpawns(CMap@ map, string markerName, string blobToSpawn, int teamNum = 0)
 {
-    Vec2f[] spawns;
-    if (map.getMarkers(markerName, spawns))
-    {
-        for (int a = 0; a < spawns.length; a++)
-        {
-            server_CreateBlob(blobToSpawn, 0, spawns[a]);
-        }
+	Vec2f[] spawns;
+	if (map.getMarkers(markerName, spawns))
+	{
+		for (int a = 0; a < spawns.length; a++)
+		{
+			server_CreateBlob(blobToSpawn, 0, spawns[a]);
+		}
 
-        return true;
-    }
-    
-    return false;
+		return true;
+	}
+	
+	return false;
 }
 
 // Same as above, but we remove all scripts attached to them
 // This prevents us from using it
 bool AddSpawnsCosmeticOnly(CMap@ map, string markerName, string blobToSpawn, int teamNum = 0)
 {
-    Vec2f[] spawns;
-    if (map.getMarkers(markerName, spawns))
-    {
-        for (int a = 0; a < spawns.length; a++)
-        {
-            CBlob@ blob = server_CreateBlob(blobToSpawn, 0, spawns[a]);
-            if (blob is null) 
-                continue;
+	Vec2f[] spawns;
+	if (map.getMarkers(markerName, spawns))
+	{
+		for (int a = 0; a < spawns.length; a++)
+		{
+			CBlob@ blob = server_CreateBlob(blobToSpawn, 0, spawns[a]);
+			if (blob is null) 
+				continue;
 
-            // TODO-> Engine side need a way to get all scripts by name!
-        }
+			// TODO-> Engine side need a way to get all scripts by name!
+		}
 
-        return true;
-    }
-    
-    return false;
+		return true;
+	}
+	
+	return false;
 }
