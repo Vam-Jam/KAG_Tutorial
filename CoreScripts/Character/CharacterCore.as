@@ -52,7 +52,6 @@ void onReload(CRules@ this)
 
 void shitflute(CBlob@ caller)
 {
-	GUI::SetFont("menu");
 	char.AddResponse("ok", "Say what you will about the $RED2$Archer$WHITE$ class, but I for one am glad they exist. I was born with a disability that means I only have 1 finger on each hand. THD was extremely considerate to provide a class I can win with even with this disability, very inclusive. \n\nOh also my disability left me blind and with only 3 brain cells but Archer allows me to get a high kdr rank. Thank you THD for caring for the disabled like me");
 	char.SetCurrentResponse("ok");
 }
@@ -60,6 +59,7 @@ void shitflute(CBlob@ caller)
 class Character 
 {
 	dictionary responseMap;
+	string preferedFont = "Menu";
 	string characterName = "";
 	
 	string currentRenderText = "";
@@ -96,6 +96,11 @@ class Character
 		writeSpeed = textSpeed;
 	}
 
+	void SetPreferedFont(string name)
+	{
+		preferedFont = name;
+	}
+
 	void UpdateText()
 	{
 		if (getGameTime() % writeSpeed == 0)
@@ -127,6 +132,7 @@ class Character
 
 	void RenderBox() 
 	{
+		GUI::SetFont(preferedFont);
 		int sHeight = getDriver().getScreenHeight();
         int sWidth = getDriver().getScreenWidth();
 
