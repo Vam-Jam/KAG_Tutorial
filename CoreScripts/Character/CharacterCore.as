@@ -31,6 +31,7 @@ void onTick(CRules@ this)
 {
 	if (char is null || char.currentText == "" )
 		return;
+
 	char.UpdateText();	
 }
 
@@ -53,7 +54,7 @@ void onReload(CRules@ this)
 void shitflute(CBlob@ caller)
 {
 	char.AddResponse("ok", "Say what you will about the $RED2$Archer$WHITE$ class, but I for one am glad they exist. I was born with a disability that means I only have 1 finger on each hand. THD was extremely considerate to provide a class I can win with even with this disability, very inclusive. \n\nOh also my disability left me blind and with only 3 brain cells but Archer allows me to get a high kdr rank. Thank you THD for caring for the disabled like me");
-	char.SetCurrentResponse("ok");
+	char.SetCurrentResponse("ok", 1);
 }
 
 class Character 
@@ -103,7 +104,7 @@ class Character
 
 	void UpdateText()
 	{
-		if (getGameTime() % writeSpeed == 0)
+		if (currentRenderText.length != currentText.length && getGameTime() % writeSpeed == 0)
 		{
 			string char = currentText.substr(currentRenderText.length, 1);
 
@@ -122,6 +123,10 @@ class Character
 						break;
 					}
 				}
+			}
+			else if (char != ' ')
+			{
+				Sound::Play("Archer_blip" + (XORRandom(1) == 0 ? "_2" : ""));
 			}
 
 			currentRenderText += char;
