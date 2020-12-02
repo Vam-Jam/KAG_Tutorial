@@ -150,7 +150,7 @@ void RenderSquare(Vec2f currentPos)
 
 	if (wasClicking && !mousePressed)
 	{
-		print("Sector pos:\nTop left:" + topLeft +"\nBottom right:" + botRight);
+		print("\nSector pos:\nVec2f" + topLeft +"\nVec2f" + botRight, SColor(255, 255, 100, 255));
 	}
 }
 
