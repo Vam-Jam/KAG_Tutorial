@@ -1,8 +1,6 @@
 /// Used so there's less duplicate code with adding a map level
 
-#include "CharacterCore"
-
-
+#include "BlobCharacter"
 
 
 // Add in spawns based on a blob
@@ -50,18 +48,36 @@ bool AddSpawnsCosmeticOnly(CMap@ map, string markerName, string blobToSpawn, int
 
 
 
-CBlob@ SpawnInCharacter(string blobName, int team, Vec2f pos, string characterName)
+CBlob@ SpawnInCharacter(string blobName, int team, Vec2f pos, string characterName, bool onInit = true)
 {
-	CBlob@ blob = server_CreateBlob(blobName, team, pos);
-	
-	if (blob is null) // feels bad man
-		return null;
+	CBlob@ blob = null;
 
+	if (onInit)
+	{
+		@blob = server_CreateBlob(blobName, team, pos);
+	}
+	else 
+	{
+		@blob = server_CreateBlobNoInit(blobName);
+		blob.setPosition(pos);
+		blob.server_setTeamNum(team);
+	}
+	
+	if (blob is null) {
+		error("SpawnInCharacter creating a blob has failed!");
+		return null;
+	}
+
+	// Set character data
 	BlobCharacter@ character = BlobCharacter(blob, characterName);
 	blob.set("character", character);
-	blob.AddScript("BlobCharacterHandler.as"); // -> BAD IDEA, 
-	// send data to CRules, process in one batch instead
-	// offer no init func as well
+
+	//Call CRules and tell it to add Character into a global handler
+	CBitStream@ cbs = CBitStream();
+	CRules@ rules = getRules();
+
+	cbs.write_u16(blob.getNetworkID());
+	rules.SendCommand(rules.getCommandID("character_bound"), cbs);
 
 	return blob;
 }
