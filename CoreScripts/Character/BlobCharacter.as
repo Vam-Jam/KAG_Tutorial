@@ -2,10 +2,10 @@
 
 class BlobCharacter : Character
 {
-	CBlob@ ourBlob; 
+	CBlob@ OwnerBlob; 
 	BlobCharacter(CBlob@ owner, string name)
 	{
-		@ourBlob = owner;
+		@OwnerBlob = owner;
 		SetName(name);
 	}
 
@@ -25,6 +25,7 @@ class BlobCharacter : Character
 class BlobCharacterHandler
 {
 	array<BlobCharacter@> BlobList;
+	BlobCharacter@ CharacterToRender = null;
 	CMap@ map;
 
 	BlobCharacterHandler()
@@ -32,6 +33,27 @@ class BlobCharacterHandler
 		@map = getMap();
 	}
 
-	// Check to see if we interact with anybody(?)
-	
+	void RenderBlob(CBlob@ blob)
+	{
+		for (int a = 0; a < BlobList.length; a++)
+		{
+			BlobCharacter@ char = BlobList[a];
+
+			if (char.OwnerBlob is blob)
+			{
+				@CharacterToRender = @char;
+				break;
+			}
+		}
+	}
+
+	void onRender()
+	{
+		if (CharacterToRender is null)
+			return;
+
+		CharacterToRender.RenderBox();
+		CharacterToRender.TempCharacterBind();
+	}
+
 }
