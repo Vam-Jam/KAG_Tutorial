@@ -11,74 +11,72 @@
 
 mixin class Character 
 {
-	dictionary responseMap = dictionary();
+	dictionary ResponseMap = dictionary();
 	
-	string preferedFont = "Menu";
-	string characterName = "";
+	string PreferedFont = "Menu";
+	string CharacterName = "";
 	
-	string currentRenderText = "";
-	string currentText = "";
+	string CurrentRenderText = "";
+	string CurrentText = "";
 
-	int writeSpeed = 1;
-
-	Vertex[] char_box;
+	int WriteSpeed = 1;
 
 	void SetName(string name)
 	{
-		characterName = name;
+		CharacterName = name;
 	}
 
 	void AddResponse(string eventName, string text)
 	{
-		responseMap.set(eventName, text);
+		ResponseMap.set(eventName, text);
 	}
 
 	string getResponse(string eventName)
 	{
 		string text = "";
-		responseMap.get(eventName, text);
+		ResponseMap.get(eventName, text);
 		return text;
 	}
 
 	void GetResponse(string eventName, string &out text)
 	{
-		responseMap.get(eventName, text);
+		ResponseMap.get(eventName, text);
 	}
 
 	void SetCurrentResponse(string eventName, int textSpeed = 1)
 	{
-		currentText = getResponse(eventName);
-		writeSpeed = textSpeed;
+		CurrentText = getResponse(eventName);
+		WriteSpeed = textSpeed;
 	}
 
 	void SetPreferedFont(string name)
 	{
-		preferedFont = name;
+		PreferedFont = name;
 	}
 
 	const string getName()
 	{
-		return characterName;
+		return CharacterName;
 	}
 
 	void UpdateText()
 	{
-		if (currentRenderText.length != currentText.length && getGameTime() % writeSpeed == 0)
+		if (getGameTime() % writeSpeed == 0)
 		{
-			string char = currentText.substr(currentRenderText.length, 1);
+			string char = CurrentText.substr(CurrentRenderText.length, 1);
 
 			// Grab the full token so users dont see a part of it when reading
 			if (char == '$') 
 			{
-				for (int a = currentRenderText.length + 1; a < currentText.length; a++)
+				for (int a = CurrentRenderText.length + 1; a < CurrentText.length; a++)
 				{
-					string currentchar = currentText.substr(a, 1);
+					string currentchar = CurrentText.substr(a, 1);
 					char += currentchar;
 
 					if (currentchar == "$") 
 					{
 						// Add in the next char so adding a token doesnt waste a text update
-						char += currentText.substr(a + 1, 1);
+						char += CurrentText.substr(a + 1, 1);
 						break;
 					}
 				}
@@ -88,7 +86,7 @@ mixin class Character
 				Sound::Play("Archer_blip" + (XORRandom(1) == 0 ? "_2" : ""));
 			}
 
-			currentRenderText += char;
+			CurrentRenderText += char;
 		}
 	}
 
@@ -106,7 +104,7 @@ mixin class Character
 
         leftX += hardValue;
         GUI::DrawRectangle(Vec2f(leftX, topY), Vec2f(leftX + hardValue + 500, topY + hardValue), SColor(150,0,0,0));
-        GUI::DrawText(currentRenderText, Vec2f(leftX + 25, topY + 10), Vec2f(leftX + hardValue + 475, topY + hardValue), SColor(255, 255, 255, 255), false, false, false);
+        GUI::DrawText(CurrentRenderText, Vec2f(leftX + 25, topY + 10), Vec2f(leftX + hardValue + 475, topY + hardValue), SColor(255, 255, 255, 255), false, false, false);
 	}
 }
 

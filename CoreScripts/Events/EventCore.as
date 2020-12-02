@@ -24,14 +24,14 @@ mixin class Event
 	// A callback to see if we should run out event (not required)
 	private PreEventCheck@ PreCheck;
 	// Should we delete this event after its called
-	bool destroyAfterCall = true;
+	bool DestroyAfterCall = true;
 
 	// Constructors for the event mixin so we can quickly call this
 	void Event(EventFunc@ mainEvent, PreEventCheck@ checkEvent = null, bool removeAfterUse = true) 
 	{
 		@Callback = mainEvent;
 		@PreCheck = checkEvent;
-		destroyAfterCall = removeAfterUse;
+		DestroyAfterCall = removeAfterUse;
 	}
 
 	// Should we call, if so call main event
@@ -61,7 +61,7 @@ mixin class Event
 	{
 		Callback(caller);
 
-		if (destroyAfterCall)
+		if (DestroyAfterCall)
 			return true;
 
 		return false;

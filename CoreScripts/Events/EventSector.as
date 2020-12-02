@@ -9,11 +9,11 @@ class SectorEvent : Event
 
 	// An id is needed, we cant use Sector ownerid unless you 
 	// want sectors to go when a blob despawns randomly
-	u16 id = 0; 
+	u16 Id = 0; 
 
 	SectorEvent(EventFunc@ mainEvent, PreEventCheck@ checkEvent, Vec2f topLeft, Vec2f botRight, bool removeAfterUse = true)
 	{
-		@EventSector = getMap().server_AddSector(topLeft, botRight, id + '');
+		@EventSector = getMap().server_AddSector(topLeft, botRight, Id + '');
 		Event(mainEvent, checkEvent, removeAfterUse);
 	}
 
@@ -38,7 +38,7 @@ class SectorEvent : Event
 	void ChangeId(const u16 newId)
 	{
 		EventSector.name = newId+'';
-		id = newId;
+		Id = newId;
 	}
 
 	void RemoveSector()
