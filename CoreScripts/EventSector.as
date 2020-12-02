@@ -1,3 +1,5 @@
+
+
 #include "EventCore"
 
 class SectorEvent : Event	
@@ -9,15 +11,15 @@ class SectorEvent : Event
 	// want sectors to go when a blob despawns randomly
 	u16 id = 0; 
 
-	SectorEvent(EventFunc@ mainEvent, Vec2f topLeft, Vec2f botRight, PreEventCheck@ checkEvent = null, bool removeAfterUse = true)
+	SectorEvent(EventFunc@ mainEvent, PreEventCheck@ checkEvent, Vec2f topLeft, Vec2f botRight, bool removeAfterUse = true)
 	{
 		@EventSector = getMap().server_AddSector(topLeft, botRight, id + '');
 		Event(mainEvent, checkEvent, removeAfterUse);
 	}
 
-	SectorEvent(EventFunc@ mainEvent, Vec2f topLeft, Vec2f botRight, bool removeAfterUse = true, PreEventCheck@ checkEvent = null)
+	SectorEvent(EventFunc@ mainEvent, Vec2f topLeft, Vec2f botRight, bool removeAfterUse = true)
 	{
-		this = SectorEvent(mainEvent, topLeft, botRight, checkEvent, removeAfterUse);
+		this = SectorEvent(mainEvent, null, topLeft, botRight, removeAfterUse);
 	}
 
 	void SetNewSector(CMap::Sector@ newSector, bool removeOld = true)
@@ -142,5 +144,4 @@ class SectorHandler
 			}
 		}
 	}
-
 };

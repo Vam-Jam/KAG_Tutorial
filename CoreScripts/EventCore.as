@@ -5,11 +5,8 @@
 ////  This will contain any important core classes
 ////  for making any event for kag levels
 ////
-////  HEAVILY IN WIP
-////  PLEASE STAND BY!
-////
-////
-////
+////  Other .as files will use this to make their own
+////  Event
 ////
 ///////////////////////////////////////////////////////////
 

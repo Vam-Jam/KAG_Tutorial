@@ -26,7 +26,7 @@ void onRulesRestart( CMap@ this, CRules@ rules )
 	);
 
 	handler.AddNewEvent(
-		SectorEvent(HelloWorld, Vec2f(474, 410), Vec2f(617, 466), BombCheck, false)
+		SectorEvent(HelloWorld, BombCheck, Vec2f(474, 410), Vec2f(617, 466), false)
 	);
 }
 

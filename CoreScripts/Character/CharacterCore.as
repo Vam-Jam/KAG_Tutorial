@@ -46,6 +46,7 @@ void onRender(CRules@ this)
 
 void onReload(CRules@ this)
 {
+	Setup();	
 	getMap().RemoveAllSectors();
 	@char = Character();
 	shitflute(null);
@@ -54,18 +55,22 @@ void onReload(CRules@ this)
 void shitflute(CBlob@ caller)
 {
 	char.AddResponse("ok", "Say what you will about the $RED2$Archer$WHITE$ class, but I for one am glad they exist. I was born with a disability that means I only have 1 finger on each hand. THD was extremely considerate to provide a class I can win with even with this disability, very inclusive. \n\nOh also my disability left me blind and with only 3 brain cells but Archer allows me to get a high kdr rank. Thank you THD for caring for the disabled like me");
-	char.SetCurrentResponse("ok", 1);
+	char.SetCurrentResponse("ok", 2);
 }
 
 class Character 
 {
 	dictionary responseMap;
+	
 	string preferedFont = "Menu";
 	string characterName = "";
 	
 	string currentRenderText = "";
 	string currentText = "";
+
 	int writeSpeed = 1;
+
+	Vertex[] char_box;
 
 	Character(string name) 
 	{
@@ -119,7 +124,7 @@ class Character
 					if (currentchar == "$") 
 					{
 						// Add in the next char so adding a token doesnt waste a text update
-						currentchar = currentText.substr(a + 1, 1);
+						char += currentText.substr(a + 1, 1);
 						break;
 					}
 				}
@@ -159,6 +164,7 @@ class Character
         int leftX = sWidth / 6;
         int topY = sHeight - (sHeight / 2.5);
         int hardValue = 100;
-        GUI::DrawIcon("ArcherTest.png", 0, Vec2f(12,12), Vec2f(leftX + 5,topY + 5), 3.8f, SColor(150, 255, 255, 255));
+        //GUI::DrawIcon(test_name, 0, Vec2f(12,12), Vec2f(leftX + 5,topY + 5), 3.8f, SColor(150, 255, 255, 255));
+
 	}
 }
