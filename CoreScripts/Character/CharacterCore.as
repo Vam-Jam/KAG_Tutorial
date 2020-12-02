@@ -61,7 +61,7 @@ mixin class Character
 
 	void UpdateText()
 	{
-		if (getGameTime() % writeSpeed == 0)
+		if (getGameTime() % WriteSpeed == 0)
 		{
 			string char = CurrentText.substr(CurrentRenderText.length, 1);
 
@@ -93,7 +93,7 @@ mixin class Character
 	// TODO -> Sort this junk out, clear our sHeight and sWidth n stuff
 	void RenderBox() 
 	{
-		GUI::SetFont(preferedFont);
+		GUI::SetFont(PreferedFont);
 		int sHeight = getDriver().getScreenHeight();
         int sWidth = getDriver().getScreenWidth();
 
