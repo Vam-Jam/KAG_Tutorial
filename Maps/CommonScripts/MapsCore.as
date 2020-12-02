@@ -70,8 +70,11 @@ CBlob@ SpawnInCharacter(string blobName, int team, Vec2f pos, string characterNa
 		return null;
 	}
 
+	blob.AddScript("InteractableCharacter");
+
 	// Set character data
 	BlobCharacter@ character = BlobCharacter(blob, characterName);
+	character.AddResponse("test", "A fake mod with a scrolling storyline about 'Knight Sedgewick' and then a spinning weeaboo cube with anime faces and cats on it");
 	blob.set("character", character);
 
 	//Call CRules and tell it to add Character into a global handler

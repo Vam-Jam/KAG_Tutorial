@@ -78,12 +78,28 @@ class BlobCharacterHandler
 		}
 	}
 
+	bool FindAndSetToSpeak()
+	{
+		for (int a = 0; a < BlobList.length; a++)
+		{
+			BlobCharacter@ char = BlobList[a];
+			if (char.CurrentText != "")
+			{
+				@CharacterToRender = char;
+				return true;
+			}
+		}
+		
+		return false;
+	}
+
 	void onTick()
 	{
-		if (CharacterToRender is null || !CharacterToRender.FinishedWriting)
+		if (CharacterToRender is null && !FindAndSetToSpeak())
 			return;
 
-		CharacterToRender.UpdateText();
+		if (!CharacterToRender.FinishedWriting)
+			CharacterToRender.UpdateText();
 	}
 
 	void onRender()
@@ -100,4 +116,12 @@ class BlobCharacterHandler
 	{
 		BlobList.clear();
 	}
+}
+
+////// Quick handles for scripts to use //////
+BlobCharacter@ getCharacter(CBlob@ blob)
+{
+	BlobCharacter@ character = null;
+	blob.get("character", @character);
+	return character;
 }

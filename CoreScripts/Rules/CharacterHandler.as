@@ -13,7 +13,10 @@ void onInit(CRules@ this)
 
 void onRestart(CRules@ this)
 {
-	onReload(this);
+	if (Handler !is null) 
+		Handler.Clear();
+
+	@Handler = BlobCharacterHandler();
 }
 
 void onReload(CRules@ this)
@@ -22,6 +25,26 @@ void onReload(CRules@ this)
 		Handler.Clear();
 
 	@Handler = BlobCharacterHandler();
+
+	// Only for reloads
+	CBlob@[] blobs;
+	getBlobs(@blobs);
+
+	for (int a = 0; a < blobs.length; a++)
+	{
+		CBlob@ blob = blobs[a];
+		if (blob is null)
+			continue;
+
+		BlobCharacter@ char = getCharacter(blob);
+
+		if (char is null)
+			continue;
+
+		Handler.AddCharacter(char);
+	}
+	// End
+	
 }
 
 void onTick(CRules@ this)

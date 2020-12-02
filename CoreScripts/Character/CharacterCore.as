@@ -96,7 +96,7 @@ mixin class Character
 			CurrentRenderText += char;
 
 			if (CurrentRenderText.length == CurrentText.length)
-				return;
+				FinishedWriting = true;
 		}
 	}
 
