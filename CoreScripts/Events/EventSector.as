@@ -49,7 +49,7 @@ class SectorEvent : Event
 
 class SectorHandler
 {
-	array<SectorEvent> EventList;
+	array<SectorEvent@> EventList;
 	CMap@ map;
 
 	SectorHandler() 

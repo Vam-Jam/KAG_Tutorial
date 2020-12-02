@@ -52,6 +52,8 @@ CBlob@ SpawnInCharacter(string blobName, int team, Vec2f pos, string characterNa
 {
 	CBlob@ blob = null;
 
+	// Offer them an option to auto init or not
+	// In case they want to set their own settings
 	if (onInit)
 	{
 		@blob = server_CreateBlob(blobName, team, pos);

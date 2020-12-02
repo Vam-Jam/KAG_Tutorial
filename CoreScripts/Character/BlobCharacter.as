@@ -20,3 +20,18 @@ class BlobCharacter : Character
         GUI::DrawIcon("GetiTest.png", 0, Vec2f(12,12), Vec2f(leftX + 5,topY + 5), 3.8f, SColor(150, 255, 255, 255));
 	}
 }
+
+
+class BlobCharacterHandler
+{
+	array<BlobCharacter@> BlobList;
+	CMap@ map;
+
+	BlobCharacterHandler()
+	{
+		@map = getMap();
+	}
+
+	// Check to see if we interact with anybody(?)
+	
+}
