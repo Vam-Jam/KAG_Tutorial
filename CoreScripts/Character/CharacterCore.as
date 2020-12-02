@@ -56,6 +56,11 @@ mixin class Character
 		preferedFont = name;
 	}
 
+	const string getName()
+	{
+		return characterName;
+	}
+
 	void UpdateText()
 	{
 		if (currentRenderText.length != currentText.length && getGameTime() % writeSpeed == 0)
