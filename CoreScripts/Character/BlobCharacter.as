@@ -40,7 +40,7 @@ class BlobCharacterHandler
 
 	void AddCharacter(BlobCharacter@ character)
 	{
-		BlobList.push_back(@character);
+		BlobList.push_back(character);
 
 		if (g_debug > 0)
 		{
@@ -61,7 +61,7 @@ class BlobCharacterHandler
 			return;
 		}
 
-		AddCharacter(@character);
+		AddCharacter(character);
 	}
 
 	void SetBlobToRender(CBlob@ blob)
