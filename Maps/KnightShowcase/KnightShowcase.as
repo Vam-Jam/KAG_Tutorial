@@ -17,4 +17,15 @@ void onRestart(CMap@ this)
 	{
 		error("Could not find spawn markers to place!");
 	}
+
+	//SpawnInCharacter("archer", 0, Vec2f(538, 560), "archer");
+	
+}
+
+void onTick(CMap@ map)
+{
+	if (getGameTime() % 120 == 0)
+	{
+		SpawnInCharacter("archer", 0, Vec2f(538, 560), "archer");
+	}
 }

@@ -1,5 +1,10 @@
 /// Used so there's less duplicate code with adding a map level
 
+#include "CharacterCore"
+
+
+
+
 // Add in spawns based on a blob
 // Some maps might want you to spawn at a tent
 // Some might want you to spawn at a shop, idk
@@ -41,4 +46,22 @@ bool AddSpawnsCosmeticOnly(CMap@ map, string markerName, string blobToSpawn, int
 	}
 	
 	return false;
+}
+
+
+
+CBlob@ SpawnInCharacter(string blobName, int team, Vec2f pos, string characterName)
+{
+	CBlob@ blob = server_CreateBlob(blobName, team, pos);
+	
+	if (blob is null) // feels bad man
+		return null;
+
+	BlobCharacter@ character = BlobCharacter(blob, characterName);
+	blob.set("character", character);
+	blob.AddScript("BlobCharacterHandler.as"); // -> BAD IDEA, 
+	// send data to CRules, process in one batch instead
+	// offer no init func as well
+
+	return blob;
 }
