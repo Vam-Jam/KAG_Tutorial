@@ -13,13 +13,19 @@ mixin class Character
 {
 	dictionary ResponseMap = dictionary();
 	
+	// Maybe you want this character to have a custom font
 	string PreferedFont = "Menu";
+	// Custom character name
 	string CharacterName = "";
 	
+	// Text that is currently on the screen
 	string CurrentRenderText = "";
+	// The whole text that is being written to ^
 	string CurrentText = "";
-
+	// How fast should we write (needs changing)
 	int WriteSpeed = 1;
+	// Are we done writing?
+	bool FinishedWriting = false;
 
 	void SetName(string name)
 	{
@@ -45,6 +51,7 @@ mixin class Character
 
 	void SetCurrentResponse(string eventName, int textSpeed = 1)
 	{
+		FinishedWriting = false;
 		CurrentText = getResponse(eventName);
 		WriteSpeed = textSpeed;
 	}
@@ -87,6 +94,9 @@ mixin class Character
 			}
 
 			CurrentRenderText += char;
+
+			if (CurrentRenderText.length == CurrentText.length)
+				return;
 		}
 	}
 

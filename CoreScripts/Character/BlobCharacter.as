@@ -24,8 +24,13 @@ class BlobCharacter : Character
 
 class BlobCharacterHandler
 {
+	// List of all the blob characters in our game
 	array<BlobCharacter@> BlobList;
+
+	// Character we are going to render
 	BlobCharacter@ CharacterToRender = null;
+	
+	// Dunno if we need this
 	CMap@ map;
 
 	BlobCharacterHandler()
@@ -33,7 +38,33 @@ class BlobCharacterHandler
 		@map = getMap();
 	}
 
-	void RenderBlob(CBlob@ blob)
+	void AddCharacter(BlobCharacter@ character)
+	{
+		BlobList.push_back(@character);
+
+		if (g_debug > 0)
+		{
+			print("Adding character \"" + character.getName() + "\"");
+		}
+	}
+
+	void AddCharacter(CBlob@ blob)
+	{
+		BlobCharacter@ character = null;
+		blob.get("character", @character);
+
+		if (character is null) 
+		{
+			error("AddCharacter with blob " + blob.getName() + 
+				" is null, please create character before hand!");
+
+			return;
+		}
+
+		AddCharacter(@character);
+	}
+
+	void SetBlobToRender(CBlob@ blob)
 	{
 		for (int a = 0; a < BlobList.length; a++)
 		{
@@ -47,6 +78,14 @@ class BlobCharacterHandler
 		}
 	}
 
+	void onTick()
+	{
+		if (CharacterToRender is null || !CharacterToRender.FinishedWriting)
+			return;
+
+		CharacterToRender.UpdateText();
+	}
+
 	void onRender()
 	{
 		if (CharacterToRender is null)
@@ -56,4 +95,9 @@ class BlobCharacterHandler
 		CharacterToRender.TempCharacterBind();
 	}
 
+	// Todo: some other stuff?
+	void Clear()
+	{
+		BlobList.clear();
+	}
 }
