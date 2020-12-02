@@ -21,6 +21,7 @@ void onRestart(CRules@ this)
 
 void onReload(CRules@ this)
 {
+	print("hi");
 	if (Handler !is null) 
 		Handler.Clear();
 
