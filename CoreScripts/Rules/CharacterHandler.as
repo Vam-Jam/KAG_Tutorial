@@ -35,6 +35,9 @@ void onCommand(CRules@ this, u8 cmd, CBitStream@ params)
 		BlobCharacter@ character = null;
 		blob.get("character", @character);
 
-		print(character.characterName + '');
+		if (g_debug > 0)
+		{
+			print("Adding character \"" + character.getName() + "\"");
+		}
 	}
 }
