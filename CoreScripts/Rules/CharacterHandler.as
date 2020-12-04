@@ -17,7 +17,7 @@ void onInit(CRules@ this)
 	this.addCommandID("character_bound"); 
 	onRestart(this);
 
-	id = Render::addScript(Render::layer_posthud, "CharacterHandler.as", "NewRender", 10.0f);
+	//id = Render::addScript(Render::layer_posthud, "CharacterHandler.as", "NewRender", 10.0f);
 }
 
 void onRestart(CRules@ this)
@@ -82,37 +82,8 @@ void onCommand(CRules@ this, u8 cmd, CBitStream@ params)
 	}
 }
 
-
-// onRender but also useful for character portait stuff
-void NewRender(int id)
+void onRender(CRules@ this)
 {
 	if (Handler !is null)
 		Handler.onRender();
-
-	CBlob@ local = getLocalPlayerBlob();
-
-	if (local is null)
-		return;
-
-	int sHeight = getDriver().getScreenHeight();
-	int sWidth = getDriver().getScreenWidth();
-
-	int leftX = sWidth / 6;
-	int topY = sHeight - (sHeight / 2.5);
-	int hardValue = 100;
-
-	CSpriteLayer@ head = local.getSprite().getSpriteLayer("head");
-	int temp = 0;
-	Vec2f head_offset = getHeadOffset(local, -1, temp);
-
-	Vec2f headpos(leftX, topY);
-	headpos += local.getSprite().getOffset();
-	headpos += Vec2f(-11, -23);
-
-	s32 index = local.get_s32("head index");
-	s32 team = local.get_s32("head team");
-	string texture_file = local.get_string("head texture");
-
-	GUI::DrawIcon("Archer_class.png", 0, Vec2f(12, 12), Vec2f(leftX + 5, topY + 5), 4.0f, team);
-	GUI::DrawIcon(texture_file, index, Vec2f(16, 16), headpos , 4.0f, team);
 }

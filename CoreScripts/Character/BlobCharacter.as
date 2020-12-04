@@ -1,5 +1,7 @@
 //#include "CharacterCore"
 
+int SCREEN_HEIGHT = 0;
+int SCREEN_WIDTH  = 0;
 
 mixin class Character 
 {
@@ -93,20 +95,16 @@ mixin class Character
 	}
 
 	// TODO -> Sort this junk out, clear our sHeight and sWidth n stuff
-	void RenderBox() 
+	void RenderBox(Vec2f topLeft) 
 	{
 		GUI::SetFont(PreferedFont);
-		int sHeight = getDriver().getScreenHeight();
-        int sWidth = getDriver().getScreenWidth();
-
-        int leftX = sWidth / 6;
-        int topY = sHeight - (sHeight / 2.5);
         int hardValue = 100;
-        GUI::DrawFramedPane(Vec2f(leftX, topY), Vec2f(leftX + hardValue, topY + hardValue));
 
-        leftX += hardValue;
-        GUI::DrawRectangle(Vec2f(leftX, topY), Vec2f(leftX + hardValue + 500, topY + hardValue), SColor(150,0,0,0));
-        GUI::DrawText(CurrentRenderText, Vec2f(leftX + 25, topY + 10), Vec2f(leftX + hardValue + 475, topY + hardValue), SColor(255, 255, 255, 255), false, false, false);
+        GUI::DrawFramedPane(topLeft, Vec2f(topLeft.x + hardValue, topLeft.y + hardValue));
+
+        topLeft.x += hardValue;
+        GUI::DrawRectangle(topLeft, Vec2f(topLeft.x + hardValue + 500, topLeft.y + hardValue), SColor(150,0,0,0));
+        GUI::DrawText(CurrentRenderText, Vec2f(topLeft.x + 25, topLeft.y + 10), Vec2f(topLeft.x + hardValue + 475, topLeft.y + hardValue), SColor(255, 255, 255, 255), false, false, false);
 	}
 }
 
@@ -121,8 +119,10 @@ mixin class Character
 class BlobCharacter : Character
 {
 	CBlob@ OwnerBlob; 
-
-	Vertex[] PortraitVertex;
+	s32 HeadIndex = 0;
+	u8 testFrame = 0;
+	s32 Team = 0;
+	string TextureFile = "";
 
 	BlobCharacter(CBlob@ owner, string name)
 	{
@@ -130,9 +130,26 @@ class BlobCharacter : Character
 		SetName(name);
 	}
 
-	void TempCharacterBind()
+	void CustomTextUpdate()
 	{
-		
+		UpdateText();
+
+		if (!FinishedWriting && CurrentRenderText.substr(CurrentRenderText.length -2, 1) != " ")
+			testFrame = 1;
+		else
+			testFrame = 0;
+	}
+
+	void CharacterPortrait(Vec2f topLeft)
+	{
+		Vec2f headpos(topLeft.x - 11, topLeft.y - 27);
+
+		HeadIndex = OwnerBlob.get_s32("head index");
+		Team = OwnerBlob.get_s32("head team");
+		TextureFile = OwnerBlob.get_string("head texture");
+
+		GUI::DrawIcon("Archer_class.png", 0, Vec2f(12, 12), Vec2f(topLeft.x + 5, topLeft.y + 5), 4.0f, Team);
+		GUI::DrawIcon(TextureFile, HeadIndex + testFrame, Vec2f(16, 16), headpos , 4.0f, Team);
 	}
 }
 
@@ -210,11 +227,19 @@ class BlobCharacterHandler
 
 	void onTick()
 	{
+		UpdateScreenVars();
+
 		if (CharacterToRender is null && !FindAndSetToSpeak())
 			return;
 
 		if (!CharacterToRender.FinishedWriting)
-			CharacterToRender.UpdateText();
+			CharacterToRender.CustomTextUpdate();
+	}
+
+	void UpdateScreenVars()
+	{
+		SCREEN_HEIGHT = getDriver().getScreenHeight();
+		SCREEN_WIDTH = getDriver().getScreenWidth();
 	}
 
 	void onRender()
@@ -222,8 +247,10 @@ class BlobCharacterHandler
 		if (CharacterToRender is null)
 			return;
 
-		CharacterToRender.RenderBox();
-		CharacterToRender.TempCharacterBind();
+		Vec2f topLeft(SCREEN_WIDTH / 6, SCREEN_HEIGHT - (SCREEN_HEIGHT / 2.5));
+
+		CharacterToRender.RenderBox(topLeft);
+		CharacterToRender.CharacterPortrait(topLeft);
 	}
 
 	// Todo: some other stuff?
