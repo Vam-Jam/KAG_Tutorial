@@ -132,6 +132,7 @@ class BlobCharacter : Character
 
 	void TempCharacterBind()
 	{
+		
 	}
 }
 
