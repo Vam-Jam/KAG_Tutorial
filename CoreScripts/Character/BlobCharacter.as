@@ -100,11 +100,11 @@ mixin class Character
 		GUI::SetFont(PreferedFont);
         int hardValue = 100;
 
-        GUI::DrawFramedPane(topLeft, Vec2f(topLeft.x + hardValue, topLeft.y + hardValue));
+        GUI::DrawFramedPane(topLeft, Vec2f(topLeft.x + hardValue, topLeft.y + hardValue + 6));
 
         topLeft.x += hardValue;
-        GUI::DrawRectangle(topLeft, Vec2f(topLeft.x + hardValue + 500, topLeft.y + hardValue), SColor(150,0,0,0));
-        GUI::DrawText(CurrentRenderText, Vec2f(topLeft.x + 25, topLeft.y + 10), Vec2f(topLeft.x + hardValue + 475, topLeft.y + hardValue), SColor(255, 255, 255, 255), false, false, false);
+        GUI::DrawRectangle(topLeft, Vec2f(topLeft.x + hardValue + 500, topLeft.y + hardValue + 6), SColor(150,0,0,0));
+        GUI::DrawText(CurrentRenderText, Vec2f(topLeft.x + 25, topLeft.y + 10), Vec2f(topLeft.x + hardValue + 475, topLeft.y + hardValue + 6), SColor(255, 255, 255, 255), false, false, false);
 	}
 }
 
