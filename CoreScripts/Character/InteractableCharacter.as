@@ -32,6 +32,10 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream@ params)
 		BlobCharacter@ char = getCharacter(this);
 
 		char.SetCurrentResponse("test");
+
+		CBitStream cbs = CBitStream();
+		cbs.write_u16(this.getNetworkID());
+		getRules().SendCommand(getRules().getCommandID("character_test"), cbs);
 	}
 }
 

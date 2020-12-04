@@ -18,6 +18,8 @@ void onInit(CRules@ this)
 	// This will be called when a blob dies
 	// This is required unless you want the game to crash
 	this.addCommandID("character_unbound");
+	// Temp bind
+	this.addCommandID("character_test");
 	onRestart(this);
 
 	//id = Render::addScript(Render::layer_posthud, "CharacterHandler.as", "NewRender", 10.0f);
@@ -56,7 +58,7 @@ void onReload(CRules@ this)
 		if (char is null)
 			continue;
 
-		Handler.AddCharacter(BlobCharacter(char));
+		Handler.AddCharacter(char);
 	}
 	// End
 
@@ -95,6 +97,13 @@ void onCommand(CRules@ this, u8 cmd, CBitStream@ params)
 		}
 
 		Handler.RemoveCharacter(blob);
+	}
+	else if (cmd == this.getCommandID("character_test"))
+	{
+		u16 networkId = params.read_u16();
+		CBlob@ blob = getBlobByNetworkID(networkId);
+
+		Handler.SetBlobToRender(blob);
 	}
 }
 
