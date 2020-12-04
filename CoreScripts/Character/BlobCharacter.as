@@ -186,6 +186,58 @@ class BlobCharacterHandler
 		}
 	}
 
+	void RemoveCharacter(CBlob@ blob)
+	{
+		BlobCharacter@ character = null;
+		blob.get("character", @character);
+
+		if (character is null)
+		{
+			error("RemoveCharacter with blob " + blob.getName() +
+				" is null, please only remove when blob has a character attached to it");
+			return; 
+		}
+
+		if (CharacterToRender is character)
+		{
+			@CharacterToRender = null;
+		}
+
+		int index = getBlobIndex(character);
+		if (index != -1)
+		{
+			BlobList.erase(index);
+		}
+	}
+
+	int getBlobIndex(BlobCharacter@ char)
+	{
+		for (int a = 0; a < BlobList.length; a++)
+		{
+			if (char is BlobList[a])
+			{
+				return a;
+			}
+		}
+
+		return -1;
+	}
+
+	int getBlobIndex(CBlob@ blob)
+	{
+		for (int a = 0; a < BlobList.length; a++)
+		{
+			BlobCharacter@ char = BlobList[a];
+
+			if (char.OwnerBlob is blob)
+			{
+				return a;
+			}
+		}
+
+		return -1;
+	}
+
 	void AddCharacter(CBlob@ blob)
 	{
 		BlobCharacter@ character = null;
@@ -204,15 +256,10 @@ class BlobCharacterHandler
 
 	void SetBlobToRender(CBlob@ blob)
 	{
-		for (int a = 0; a < BlobList.length; a++)
+		int index = getBlobIndex(blob);
+		if (index != -1)
 		{
-			BlobCharacter@ char = BlobList[a];
-
-			if (char.OwnerBlob is blob)
-			{
-				@CharacterToRender = @char;
-				break;
-			}
+			blob.get("character", @CharacterToRender);
 		}
 	}
 
@@ -255,8 +302,7 @@ class BlobCharacterHandler
 
 		Vec2f topLeft(SCREEN_WIDTH / 6, SCREEN_HEIGHT - (SCREEN_HEIGHT / 2.5));
 
-		CharacterToRender.RenderBox(topLeft);
-		CharacterToRender.CharacterPortrait(topLeft);
+		CharacterToRender.CustomRender(topLeft);
 	}
 
 	// Todo: some other stuff?
