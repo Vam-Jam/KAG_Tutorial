@@ -94,17 +94,28 @@ mixin class Character
 		}
 	}
 
-	// TODO -> Sort this junk out, clear our sHeight and sWidth n stuff
 	void RenderBox(Vec2f &in topLeft) 
 	{
+		// Character pane in pixels
+		const int paneWidth = 100;
+		// Text box background
+		const int rectangleWidth = topLeft.x * 5;
+		// Bottom right
+        Vec2f botRight = Vec2f(topLeft.x + paneWidth, topLeft.y + paneWidth);
+
+		// Pane to the left
+        GUI::DrawFramedPane(topLeft, Vec2f(botRight.x, botRight.y + 8)); 
+
+		// Move the rest slightly right since we got that pane
+        topLeft.x += paneWidth;
+
+		// Shadowed box that sits behind the text
+        GUI::DrawRectangle(topLeft, Vec2f(rectangleWidth, botRight.y + 6), SColor(150,0,0,0));
+
+		// Render font (and make sure we set the font they want before hand)
 		GUI::SetFont(PreferedFont);
-        const int hardValue = 100;
-
-        GUI::DrawFramedPane(topLeft, Vec2f(topLeft.x + hardValue, topLeft.y + hardValue + 8));
-
-        topLeft.x += hardValue;
-        GUI::DrawRectangle(topLeft, Vec2f(topLeft.x + hardValue + 500, topLeft.y + hardValue + 6), SColor(150,0,0,0));
-        GUI::DrawText(CurrentRenderText, Vec2f(topLeft.x + 25, topLeft.y + 10), Vec2f(topLeft.x + hardValue + 475, topLeft.y + hardValue + 6), SColor(255, 255, 255, 255), false, false, false);
+        GUI::DrawText(CurrentRenderText, Vec2f(topLeft.x + 25, topLeft.y + 10), 
+			Vec2f(rectangleWidth - 25, botRight.y + 6), SColor(255, 255, 255, 255), false, false, false);
 	}
 }
 
