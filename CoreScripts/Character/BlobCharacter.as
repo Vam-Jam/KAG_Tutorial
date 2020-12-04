@@ -95,7 +95,7 @@ mixin class Character
 	}
 
 	// TODO -> Sort this junk out, clear our sHeight and sWidth n stuff
-	void RenderBox(Vec2f topLeft) 
+	void RenderBox(Vec2f &in topLeft) 
 	{
 		GUI::SetFont(PreferedFont);
         int hardValue = 100;
@@ -140,7 +140,13 @@ class BlobCharacter : Character
 			testFrame = 0;*/
 	}
 
-	void CharacterPortrait(Vec2f topLeft)
+	void CustomRender(Vec2f &in topLeft)
+	{
+		RenderBox(topLeft);
+		CharacterPortrait(topLeft);
+	}
+
+	void CharacterPortrait(Vec2f &in topLeft)
 	{
 		Vec2f headpos(topLeft.x - 11, topLeft.y - 27);
 
