@@ -145,6 +145,11 @@ class BlobCharacter : Character
 	{
 		UpdateText();
 
+		// We only need to update this every so often
+		HeadIndex = OwnerBlob.get_s32("head index");
+		Team = OwnerBlob.get_s32("head team");
+		TextureFile = OwnerBlob.get_string("head texture");
+
 		/*if (!FinishedWriting && CurrentRenderText.substr(CurrentRenderText.length -2, 1) != " ")
 			testFrame = 1;
 		else
@@ -159,11 +164,8 @@ class BlobCharacter : Character
 
 	void CharacterPortrait(Vec2f &in topLeft)
 	{
+		// Get character head pos
 		Vec2f headpos(topLeft.x - 10, topLeft.y - 26);
-
-		HeadIndex = OwnerBlob.get_s32("head index");
-		Team = OwnerBlob.get_s32("head team");
-		TextureFile = OwnerBlob.get_string("head texture");
 
 		GUI::DrawIcon("Archer_class.png", 0, Vec2f(12, 12), Vec2f(topLeft.x + 6, topLeft.y + 6), 4.0f, Team);
 		GUI::DrawIcon(TextureFile, HeadIndex + testFrame, Vec2f(16, 16), headpos , 4.0f, Team);
