@@ -98,7 +98,7 @@ mixin class Character
 	void RenderBox(Vec2f &in topLeft) 
 	{
 		GUI::SetFont(PreferedFont);
-        int hardValue = 100;
+        const int hardValue = 100;
 
         GUI::DrawFramedPane(topLeft, Vec2f(topLeft.x + hardValue, topLeft.y + hardValue + 8));
 
@@ -148,13 +148,13 @@ class BlobCharacter : Character
 
 	void CharacterPortrait(Vec2f &in topLeft)
 	{
-		Vec2f headpos(topLeft.x - 11, topLeft.y - 26);
+		Vec2f headpos(topLeft.x - 10, topLeft.y - 26);
 
 		HeadIndex = OwnerBlob.get_s32("head index");
 		Team = OwnerBlob.get_s32("head team");
 		TextureFile = OwnerBlob.get_string("head texture");
 
-		GUI::DrawIcon("Archer_class.png", 0, Vec2f(12, 12), Vec2f(topLeft.x + 5, topLeft.y + 6), 4.0f, Team);
+		GUI::DrawIcon("Archer_class.png", 0, Vec2f(12, 12), Vec2f(topLeft.x + 6, topLeft.y + 6), 4.0f, Team);
 		GUI::DrawIcon(TextureFile, HeadIndex + testFrame, Vec2f(16, 16), headpos , 4.0f, Team);
 	}
 }
