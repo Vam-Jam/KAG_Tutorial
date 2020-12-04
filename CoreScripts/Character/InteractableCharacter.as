@@ -19,7 +19,7 @@ void onInit(CBlob@ this)
 void GetButtonsFor(CBlob@ this, CBlob@ caller)
 {
 	// Unsure if this can even go null
-	if (caller is null)
+	if (caller is null || this.hasTag("dead"))
 		return;
 
 	CButton@ button = caller.CreateGenericButton("$trade$", Vec2f_zero, this, this.getCommandID("TalkingTo"), "Test");
@@ -35,3 +35,15 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream@ params)
 	}
 }
 
+
+
+void onHealthChange( CBlob@ this, f32 oldHealth )
+{
+	// Work around to 'Invalid networkid' for trying to tell CRules to remove our character
+	if (this.hasTag("dead"))
+	{
+		CBitStream cbs = CBitStream();
+		cbs.write_u16(this.getNetworkID());
+		getRules().SendCommand(getRules().getCommandID("character_unbound"), cbs);
+	}
+}

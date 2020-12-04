@@ -15,6 +15,9 @@ void onInit(CRules@ this)
 	// This will be called when ever we have set a character
 	// The blob network ID will need to be sent as well.
 	this.addCommandID("character_bound"); 
+	// This will be called when a blob dies
+	// This is required unless you want the game to crash
+	this.addCommandID("character_unbound");
 	onRestart(this);
 
 	//id = Render::addScript(Render::layer_posthud, "CharacterHandler.as", "NewRender", 10.0f);
@@ -79,6 +82,19 @@ void onCommand(CRules@ this, u8 cmd, CBitStream@ params)
 		}
 
 		Handler.AddCharacter(blob);
+	}
+	else if (cmd == this.getCommandID("character_unbound"))
+	{
+		u16 networkId = params.read_u16();
+		CBlob@ blob = getBlobByNetworkID(networkId);
+
+		if (blob is null)
+		{
+			error("Invalid networkid character_bound : " + networkId);
+			return;
+		}
+
+		Handler.RemoveCharacter(blob);
 	}
 }
 
