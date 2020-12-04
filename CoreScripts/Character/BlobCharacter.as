@@ -134,10 +134,10 @@ class BlobCharacter : Character
 	{
 		UpdateText();
 
-		if (!FinishedWriting && CurrentRenderText.substr(CurrentRenderText.length -2, 1) != " ")
+		/*if (!FinishedWriting && CurrentRenderText.substr(CurrentRenderText.length -2, 1) != " ")
 			testFrame = 1;
 		else
-			testFrame = 0;
+			testFrame = 0;*/
 	}
 
 	void CharacterPortrait(Vec2f topLeft)
