@@ -19,7 +19,7 @@ void onRestart(CMap@ this)
 		error("Could not find spawn markers to place!");
 	}
 
-	SpawnInCharacter("archer", 0, Vec2f(538, 560), "generic archer main");
+	SpawnInCharacter("knight", 1, Vec2f(538, 560), "generic knight main");
 }
 
 void onTick(CMap@ map)
