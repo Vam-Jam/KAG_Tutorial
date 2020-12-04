@@ -81,56 +81,6 @@ void onCommand(CRules@ this, u8 cmd, CBitStream@ params)
 	}
 }
 
-void UpdateHeadTexture(CBlob@ blob)
-{
-	s32 index = blob.get_s32("head index");
-	s32 team = blob.get_s32("head team");
-	int temp_index = 0;
-	string texture_file = blob.get_string("head texture");
-
-	if (Texture::exists(temp_texture_name))
-		Texture::destroy(temp_texture_name);
-
-	if (Texture::exists(texture_head))
-		Texture::destroy(texture_head);
-
-	Texture::createFromFile(temp_texture_name, texture_file);
-
-	ImageData@ head = ImageData(16, 16);
-	ImageData@ data = Texture::data(temp_texture_name);
-
-	Vec2f pos = getPosFromIndex(index);
-
-	for (int x = 0; x < 16; x++)
-	{
-		for (int y = 0; y < 16; y++)
-		{
-			head.put(x, y, data.get(x + pos.x, y + pos.y));
-		}
-	}
-
-	Texture::createFromData(texture_head, head);
-}
-
-Vec2f getPosFromIndex(int index)
-{
-	// to optimize lol, done late night smooth brain
-	int temp_index = 0;
-	for (int x = 0; x < 32; x++)
-	{
-		for (int y = 0; y < 32; y++)
-		{
-			if (temp_index == index)
-			{
-				return Vec2f(y * 16, x * 16);
-			}
-
-			temp_index++;
-		}
-	}
-
-	return Vec2f(0,0);
-}
 
 // onRender but also useful for character portait stuff
 void NewRender(int id)
@@ -143,8 +93,6 @@ void NewRender(int id)
 	if (local is null)
 		return;
 
-	UpdateHeadTexture(local);
-	
 	int sHeight = getDriver().getScreenHeight();
 	int sWidth = getDriver().getScreenWidth();
 
@@ -152,31 +100,11 @@ void NewRender(int id)
 	int topY = sHeight - (sHeight / 2.5);
 	int hardValue = 100;
 
-	
-	/*PortraitVertex.clear();
-	PortraitVertex.push_back(Vertex(leftX,  topY,      0, 0, 0,   color_white)); // top left
-	PortraitVertex.push_back(Vertex(leftX + hardValue, topY,     0, 1, 0,   color_white)); // top right
-	PortraitVertex.push_back(Vertex(leftX + hardValue, topY + hardValue,     0, 1, 1, color_white));   // bot right
-	PortraitVertex.push_back(Vertex(leftX,  topY + hardValue,      0, 0, 1, color_white));   // bot left
 
-	Render::SetTransformScreenspace();
-	Render::SetAlphaBlend(true);
-	Render::RawQuads("GetiTest.png", PortraitVertex);*/
-	
-	PortraitVertex.clear();
-	
-	PortraitVertex.push_back(Vertex(leftX,  topY,      						0, 0, 0,   color_white)); // top left
-	PortraitVertex.push_back(Vertex(leftX + hardValue, topY,     			0, 1, 0,   color_white)); // top right
-	PortraitVertex.push_back(Vertex(leftX + hardValue, topY + hardValue,    0, 1, 1, color_white));   // bot right
-	PortraitVertex.push_back(Vertex(leftX,  topY + hardValue,      			0, 0, 1, color_white));   // bot left
+	s32 index = local.get_s32("head index");
+	s32 team = local.get_s32("head team");
+	string texture_file = local.get_string("head texture");
 
-	Render::SetTransformScreenspace();
-	Render::SetAlphaBlend(true);
-	Render::RawQuads(texture_head, PortraitVertex);
+	GUI::DrawIcon("ArcherTest.png", 0, Vec2f(12, 12), Vec2f(leftX + 5, topY + 5), 3.8f, team);
+	GUI::DrawIcon(texture_file, index, Vec2f(16, 16), Vec2f(leftX -3, topY - 25), 3.8f, team);
 }
-
-/// First task
-
-// -> get blob frame 
-// -> find a way to calc what part of the frame we are using
-// -> display one of the 3 indexs

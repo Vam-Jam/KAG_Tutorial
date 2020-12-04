@@ -132,24 +132,6 @@ class BlobCharacter : Character
 
 	void TempCharacterBind()
 	{
-		return;
-		int sHeight = getDriver().getScreenHeight();
-        int sWidth = getDriver().getScreenWidth();
-
-        int leftX = sWidth / 6;
-        int topY = sHeight - (sHeight / 2.5);
-        int hardValue = 100;
-		
-		PortraitVertex.clear();
-		
-		PortraitVertex.push_back(Vertex(leftX,  topY,      0, 0, 0,   color_white)); // top left
-		PortraitVertex.push_back(Vertex(leftX + hardValue, topY,     0, 1, 0,   color_white)); // top right
-		PortraitVertex.push_back(Vertex(leftX + hardValue, topY + hardValue,     0, 1, 1, color_white));   // bot right
-		PortraitVertex.push_back(Vertex(leftX,  topY + hardValue,      0, 0, 1, color_white));   // bot left
-
-		Render::SetTransformScreenspace();
-		Render::SetAlphaBlend(true);
-		Render::RawQuads("GetiTest.png", PortraitVertex);
 	}
 }
 
