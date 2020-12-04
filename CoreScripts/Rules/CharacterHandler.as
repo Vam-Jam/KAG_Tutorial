@@ -5,6 +5,9 @@ BlobCharacterHandler@ Handler;
 Vertex[] PortraitVertex;
 int id = 0;
 
+const string temp_texture_name = "ok_cool";
+const string texture_head = "ok_not_cool";
+
 // In localhost, this executes before CMap onInit does
 void onInit(CRules@ this)
 {
@@ -13,7 +16,7 @@ void onInit(CRules@ this)
 	this.addCommandID("character_bound"); 
 	onRestart(this);
 
-	id = Render::addScript(Render::layer_posthud, "CharacterHandler.as", "newRender", 10.0f);
+	id = Render::addScript(Render::layer_posthud, "CharacterHandler.as", "NewRender", 10.0f);
 }
 
 void onRestart(CRules@ this)
@@ -26,8 +29,9 @@ void onRestart(CRules@ this)
 
 void onReload(CRules@ this)
 {
-	Render::RemoveScript(id);
-
+	//Render::RemoveScript(id);
+	//id = Render::addScript(Render::layer_posthud, "CharacterHandler.as", "NewRender", 10.0f);
+	
 	if (Handler !is null) 
 		Handler.Clear();
 
@@ -52,33 +56,10 @@ void onReload(CRules@ this)
 	}
 	// End
 
-	id = Render::addScript(Render::layer_posthud, "CharacterHandler.as", "newRender", 10.0f);
-	
-}
-
-void SetUp()
-{
-	CBlob@ local = getLocalPlayerBlob();
-	if (local !is null && !Texture::exists("owohead"))
-	{
-		CSpriteLayer@ layer = local.getSprite().getSpriteLayer("head");
-		if (layer is null)
-		{
-			print("hi");
-			return;
-		}
-
-		ImageData@ data = Texture::dataFromSpriteLayer(null);
-
-		if (data !is null)
-				Texture::createFromData("owohead", data);
-	}
 }
 
 void onTick(CRules@ this)
 {
-	SetUp();
-
 	if (Handler !is null)
 		Handler.onTick();
 }
@@ -100,22 +81,69 @@ void onCommand(CRules@ this, u8 cmd, CBitStream@ params)
 	}
 }
 
+void UpdateHeadTexture(CBlob@ blob)
+{
+	s32 index = blob.get_s32("head index");
+	s32 team = blob.get_s32("head team");
+	int temp_index = 0;
+	string texture_file = blob.get_string("head texture");
+
+	if (Texture::exists(temp_texture_name))
+		Texture::destroy(temp_texture_name);
+
+	if (Texture::exists(texture_head))
+		Texture::destroy(texture_head);
+
+	Texture::createFromFile(temp_texture_name, texture_file);
+
+	ImageData@ head = ImageData(16, 16);
+	ImageData@ data = Texture::data(temp_texture_name);
+
+	Vec2f pos = getPosFromIndex(index);
+
+	for (int x = 0; x < 16; x++)
+	{
+		for (int y = 0; y < 16; y++)
+		{
+			head.put(x, y, data.get(x + pos.x, y + pos.y));
+		}
+	}
+
+	Texture::createFromData(texture_head, head);
+}
+
+Vec2f getPosFromIndex(int index)
+{
+	// to optimize lol, done late night smooth brain
+	int temp_index = 0;
+	for (int x = 0; x < 32; x++)
+	{
+		for (int y = 0; y < 32; y++)
+		{
+			if (temp_index == index)
+			{
+				return Vec2f(y * 16, x * 16);
+			}
+
+			temp_index++;
+		}
+	}
+
+	return Vec2f(0,0);
+}
+
 // onRender but also useful for character portait stuff
-void newRender(int id)
+void NewRender(int id)
 {
 	if (Handler !is null)
 		Handler.onRender();
 
 	CBlob@ local = getLocalPlayerBlob();
 
-	if (local is null || local.getSprite() is null)
+	if (local is null)
 		return;
 
-
-	s32 index = local.get_s32("head index");
-	s32 team = local.get_s32("head team");
-	string texture_file = local.get_string("head texture");
-
+	UpdateHeadTexture(local);
 	
 	int sHeight = getDriver().getScreenHeight();
 	int sWidth = getDriver().getScreenWidth();
@@ -124,10 +152,8 @@ void newRender(int id)
 	int topY = sHeight - (sHeight / 2.5);
 	int hardValue = 100;
 
-	int something = 0.035;
-	int pos = 0.035 * index;
 	
-	PortraitVertex.clear();
+	/*PortraitVertex.clear();
 	PortraitVertex.push_back(Vertex(leftX,  topY,      0, 0, 0,   color_white)); // top left
 	PortraitVertex.push_back(Vertex(leftX + hardValue, topY,     0, 1, 0,   color_white)); // top right
 	PortraitVertex.push_back(Vertex(leftX + hardValue, topY + hardValue,     0, 1, 1, color_white));   // bot right
@@ -135,7 +161,7 @@ void newRender(int id)
 
 	Render::SetTransformScreenspace();
 	Render::SetAlphaBlend(true);
-	Render::RawQuads("GetiTest.png", PortraitVertex);
+	Render::RawQuads("GetiTest.png", PortraitVertex);*/
 	
 	PortraitVertex.clear();
 	
@@ -146,7 +172,7 @@ void newRender(int id)
 
 	Render::SetTransformScreenspace();
 	Render::SetAlphaBlend(true);
-	Render::RawQuads("owohead", PortraitVertex);
+	Render::RawQuads(texture_head, PortraitVertex);
 }
 
 /// First task
