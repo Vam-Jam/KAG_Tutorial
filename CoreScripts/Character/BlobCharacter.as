@@ -28,7 +28,7 @@ mixin class Character
 
 	void AddResponse(string eventName, string text)
 	{
-		ResponseMap.set(eventName, text);
+		ResponseMap.set(eventName, getTranslatedString(text));
 	}
 
 	string getResponse(string eventName)
