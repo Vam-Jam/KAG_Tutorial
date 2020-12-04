@@ -94,20 +94,25 @@ mixin class Character
 		}
 	}
 
+	void ResetText()
+	{
+		CurrentRenderText = "";
+	}
+
 	void RenderBox(Vec2f &in topLeft) 
 	{
 		// Character pane in pixels
-		const int paneWidth = 100;
+		const Vec2f pane = Vec2f(108, 100);
 		// Text box background
 		const int rectangleWidth = topLeft.x * 5;
 		// Bottom right
-        Vec2f botRight = Vec2f(topLeft.x + paneWidth, topLeft.y + paneWidth);
+        Vec2f botRight = Vec2f(topLeft.x + pane.x, topLeft.y + pane.y);
 
 		// Pane to the left
         GUI::DrawFramedPane(topLeft, Vec2f(botRight.x, botRight.y + 8)); 
 
 		// Move the rest slightly right since we got that pane
-        topLeft.x += paneWidth;
+        topLeft.x += pane.x;
 
 		// Shadowed box that sits behind the text
         GUI::DrawRectangle(topLeft, Vec2f(rectangleWidth, botRight.y + 6), SColor(150,0,0,0));
@@ -129,16 +134,29 @@ mixin class Character
 
 class BlobCharacter : Character
 {
+	string CharacterTextureFile = "";
+	string HeadTextureFile = "";
 	CBlob@ OwnerBlob; 
-	s32 HeadIndex = 0;
-	u8 testFrame = 0;
+
+	s32 HeadIndex = 0; 
 	s32 Team = 0;
-	string TextureFile = "";
+
+	// Not in use
+	u8 testFrame = 0;
 
 	BlobCharacter(CBlob@ owner, string name)
 	{
 		@OwnerBlob = owner;
 		SetName(name);
+
+		// TODO MAYBE IN THE FUTURE (effort)
+		// -> Load current blob sprite if custom_body doesnt exist
+		// -> get frame data from there instead of making custom body
+
+		if (owner.exists("custom_body"))
+			CharacterTextureFile = owner.get_string("custom_body");
+		else
+			CharacterTextureFile = owner.getName() + (owner.getSexNum() == 0 ? "_male_body.png" : "_female_body.png");
 	}
 
 	void CustomTextUpdate()
@@ -148,7 +166,7 @@ class BlobCharacter : Character
 		// We only need to update this every so often
 		HeadIndex = OwnerBlob.get_s32("head index");
 		Team = OwnerBlob.get_s32("head team");
-		TextureFile = OwnerBlob.get_string("head texture");
+		HeadTextureFile = OwnerBlob.get_string("head texture");
 
 		/*if (!FinishedWriting && CurrentRenderText.substr(CurrentRenderText.length -2, 1) != " ")
 			testFrame = 1;
@@ -167,8 +185,8 @@ class BlobCharacter : Character
 		// Get character head pos
 		Vec2f headpos(topLeft.x - 10, topLeft.y - 26);
 
-		GUI::DrawIcon("Archer_class.png", 0, Vec2f(12, 12), Vec2f(topLeft.x + 6, topLeft.y + 6), 4.0f, Team);
-		GUI::DrawIcon(TextureFile, HeadIndex + testFrame, Vec2f(16, 16), headpos , 4.0f, Team);
+		GUI::DrawIcon(CharacterTextureFile, 0, Vec2f(12, 12), Vec2f(topLeft.x + 6, topLeft.y + 6), 4.0f, Team);
+		GUI::DrawIcon(HeadTextureFile, HeadIndex + testFrame, Vec2f(16, 16), headpos , 4.0f, Team);
 	}
 }
 
@@ -272,6 +290,8 @@ class BlobCharacterHandler
 		int index = getBlobIndex(blob);
 		if (index != -1)
 		{
+			if (CharacterToRender !is null)
+				CharacterToRender.ResetText();
 			blob.get("character", @CharacterToRender);
 		}
 	}
