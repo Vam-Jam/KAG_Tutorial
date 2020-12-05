@@ -106,20 +106,20 @@ mixin class Character
 		// Text box background
 		const int rectangleWidth = topLeft.x * 5;
 		// Bottom right
-        Vec2f botRight = Vec2f(topLeft.x + pane.x, topLeft.y + pane.y);
+		Vec2f botRight = Vec2f(topLeft.x + pane.x, topLeft.y + pane.y);
 
 		// Pane to the left
-        GUI::DrawFramedPane(topLeft, Vec2f(botRight.x, botRight.y + 8)); 
+		GUI::DrawFramedPane(topLeft, Vec2f(botRight.x, botRight.y + 8)); 
 
 		// Move the rest slightly right since we got that pane
-        topLeft.x += pane.x;
+		topLeft.x += pane.x;
 
 		// Shadowed box that sits behind the text
-        GUI::DrawRectangle(topLeft, Vec2f(rectangleWidth, botRight.y + 6), SColor(150,0,0,0));
+		GUI::DrawRectangle(topLeft, Vec2f(rectangleWidth, botRight.y + 6), SColor(150,0,0,0));
 
 		// Render font (and make sure we set the font they want before hand)
 		GUI::SetFont(PreferedFont);
-        GUI::DrawText(CurrentRenderText, Vec2f(topLeft.x + 25, topLeft.y + 10), 
+		GUI::DrawText(CurrentRenderText, Vec2f(topLeft.x + 25, topLeft.y + 10), 
 			Vec2f(rectangleWidth - 25, botRight.y + 6), SColor(255, 255, 255, 255), false, false, false);
 	}
 }
