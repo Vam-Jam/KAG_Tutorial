@@ -163,7 +163,7 @@ class BlobCharacter : Character
 
 	void LoadTextConfig(string configName)
 	{
-		ConfigFile cf = ConfigFile(configName);
+		ConfigFile cf = ConfigFile(CFileMatcher(configName).getFirst());
 		if (cf is null)
 		{
 			error("AttachedTextConfig " + configName + " is null (attached to character  " + CharacterName + ")");
