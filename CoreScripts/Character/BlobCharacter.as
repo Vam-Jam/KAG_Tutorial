@@ -182,9 +182,11 @@ class BlobCharacter : Character
 		// Temp work around until cfg has a get all keys func (would be named keys, but its an illegal name >:( )
 		string[] configKeys = cf.read_string("keys").split(';');
 
+		// Todo -> error if not found
 		for (int a = 0; a < configKeys.length; a++)
 		{
-			print(configKeys[a] + ' a');
+			string text = cf.read_string(configKeys[a]);
+			AddResponse(configKeys[a], text);
 		}
 	}
 
