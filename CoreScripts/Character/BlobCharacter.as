@@ -149,6 +149,8 @@ class BlobCharacter : Character
 		@OwnerBlob = owner;
 		SetName(name);
 
+		owner.set("character", this);
+
 		// TODO MAYBE IN THE FUTURE (effort)
 		// -> Load current blob sprite if custom_body doesnt exist
 		// -> get frame data from there instead of making custom body
@@ -157,6 +159,23 @@ class BlobCharacter : Character
 			CharacterTextureFile = owner.get_string("custom_body");
 		else
 			CharacterTextureFile = owner.getName() + (owner.getSexNum() == 0 ? "_male_body.png" : "_female_body.png");
+	}
+
+	void LoadTextConfig(string configName)
+	{
+		ConfigFile cf = ConfigFile(configName);
+		if (cf is null)
+		{
+			error("AttachedTextConfig " + configName + " is null (attached to character  " + CharacterName + ")");
+			return;
+		}
+
+		if (cf.exists("main")) {
+			string main = cf.read_string("main");
+			
+			AddResponse("main", main);
+			SetCurrentResponse("main");
+		}
 	}
 
 	void CustomTextUpdate()
@@ -194,7 +213,7 @@ class BlobCharacter : Character
 	void PushToGlobalHandler()
 	{
 		CBitStream@ cbs = CBitStream();
-		cbs.write_u16(blob.getNetworkID());
+		cbs.write_u16(OwnerBlob.getNetworkID());
 
 		getRules().SendCommand(getRules().getCommandID("character_bound"), cbs);
 	}
