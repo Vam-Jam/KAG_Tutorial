@@ -100,21 +100,20 @@ mixin class Character
 		}
 	}
 
-	// TODO -> Sort this junk out, clear our sHeight and sWidth n stuff
-	void RenderBox() 
+	void RenderBox(Vec2f &in topLeft)) 
 	{
 		GUI::SetFont(PreferedFont);
 		int sHeight = getDriver().getScreenHeight();
-        int sWidth = getDriver().getScreenWidth();
+		int sWidth = getDriver().getScreenWidth();
 
-        int leftX = sWidth / 6;
-        int topY = sHeight - (sHeight / 2.5);
-        int hardValue = 100;
-        GUI::DrawFramedPane(Vec2f(leftX, topY), Vec2f(leftX + hardValue, topY + hardValue));
+		int leftX = sWidth / 6;
+		int topY = sHeight - (sHeight / 2.5);
+		int hardValue = 120;
+		GUI::DrawFramedPane(Vec2f(leftX, topY), Vec2f(leftX + hardValue, topY + hardValue));
 
-        leftX += hardValue;
-        GUI::DrawRectangle(Vec2f(leftX, topY), Vec2f(leftX + hardValue + 500, topY + hardValue), SColor(150,0,0,0));
-        GUI::DrawText(CurrentRenderText, Vec2f(leftX + 25, topY + 10), Vec2f(leftX + hardValue + 475, topY + hardValue), SColor(255, 255, 255, 255), false, false, false);
+		leftX += hardValue;
+		GUI::DrawRectangle(Vec2f(leftX, topY), Vec2f(leftX + hardValue + 500, topY + hardValue), SColor(150,0,0,0));
+		GUI::DrawText(CurrentRenderText, Vec2f(leftX + 25, topY + 10), Vec2f(leftX + hardValue + 475, topY + hardValue), SColor(255, 255, 255, 255), false, false, false);
 	}
 }
 

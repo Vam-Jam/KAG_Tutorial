@@ -168,6 +168,7 @@ class BlobCharacter : Character
 		Team = OwnerBlob.get_s32("head team");
 		HeadTextureFile = OwnerBlob.get_string("head texture");
 
+		// Disabled for now, looks cursed as fuck
 		/*if (!FinishedWriting && CurrentRenderText.substr(CurrentRenderText.length -2, 1) != " ")
 			testFrame = 1;
 		else
@@ -187,6 +188,15 @@ class BlobCharacter : Character
 
 		GUI::DrawIcon(CharacterTextureFile, 0, Vec2f(12, 12), Vec2f(topLeft.x + 6, topLeft.y + 6), 4.0f, Team);
 		GUI::DrawIcon(HeadTextureFile, HeadIndex + testFrame, Vec2f(16, 16), headpos , 4.0f, Team);
+	}
+
+	// Todo -> Find a better way to do this maybe? It works for now i guess (unsure why i dislike this)
+	void PushToGlobalHandler()
+	{
+		CBitStream@ cbs = CBitStream();
+		cbs.write_u16(blob.getNetworkID());
+
+		getRules().SendCommand(getRules().getCommandID("character_bound"), cbs);
 	}
 }
 

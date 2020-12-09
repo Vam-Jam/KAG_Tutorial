@@ -48,7 +48,7 @@ bool AddSpawnsCosmeticOnly(CMap@ map, string markerName, string blobToSpawn, int
 
 
 
-CBlob@ SpawnInCharacter(string blobName, int team, Vec2f pos, string characterName, bool onInit = true, string custom_body = "")
+CBlob@ SpawnInCharacter(string blobName, int team, Vec2f pos, string characterName, bool onInit = true, string customBody = "")
 {
 	CBlob@ blob = null;
 
@@ -70,8 +70,8 @@ CBlob@ SpawnInCharacter(string blobName, int team, Vec2f pos, string characterNa
 		return null;
 	}
 
-	if (custom_body != "")
-		blob.set_string("custom_body", custom_body);
+	if (customBody != "")
+		blob.set_string("custom_body", customBody);
 
 	blob.AddScript("InteractableCharacter");
 
@@ -80,12 +80,22 @@ CBlob@ SpawnInCharacter(string blobName, int team, Vec2f pos, string characterNa
 	character.AddResponse("test", "You look stupid and stupid, and you will always be stupid");
 	blob.set("character", character);
 
-	//Call CRules and tell it to add Character into a global handler
-	CBitStream@ cbs = CBitStream();
-	CRules@ rules = getRules();
-
-	cbs.write_u16(blob.getNetworkID());
-	rules.SendCommand(rules.getCommandID("character_bound"), cbs);
+	character.setCharacter
 
 	return blob;
+}
+
+void addCharacterToBlob(CBlob@ blob, string &in characterName, string &in textFile)
+{
+	if (blob.hasScript("InteractableCharacter"))
+	{
+		error("Trying to add a script to a blob that already has InteractableCharacter.as");
+		return;
+	}
+
+	blob.AddScript("InteractableCharacter");
+
+	// Todo -> Load file
+	//BlobCharacter@ character = BlobCharacter(blob, characterName);
+
 }
