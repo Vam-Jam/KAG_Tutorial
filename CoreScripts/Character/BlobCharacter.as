@@ -149,7 +149,7 @@ class BlobCharacter : Character
 		@OwnerBlob = owner;
 		SetName(name);
 
-		owner.set("character", this);
+		owner.set("character", @this);
 
 		// TODO MAYBE IN THE FUTURE (effort)
 		// -> Load current blob sprite if custom_body doesnt exist
