@@ -178,6 +178,14 @@ class BlobCharacter : Character
 			AddResponse("main", main);
 			NextInteractKey = "main";
 		}
+
+		// Temp work around until cfg has a get all keys func (would be named keys, but its an illegal name >:( )
+		string[] configKeys = cf.read_string("keys").split(';');
+
+		for (int a = 0; a < configKeys.length; a++)
+		{
+			print(configKeys[a] + ' a');
+		}
 	}
 
 	// Called when user interacts with said target
@@ -325,6 +333,7 @@ class BlobCharacterHandler
 		{
 			if (CharacterToRender !is null)
 				CharacterToRender.ResetText();
+			
 			blob.get("character", @CharacterToRender);
 		}
 	}
