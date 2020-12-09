@@ -42,7 +42,7 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream@ params)
 
 
 
-void onHealthChange( CBlob@ this, f32 oldHealth )
+void onHealthChange(CBlob@ this, f32 oldHealth)
 {
 	// Work around to 'Invalid networkid' for trying to tell CRules to remove our character
 	if (this.hasTag("dead"))

@@ -21,8 +21,9 @@ void onInit(CRules@ this)
 	// This will force the current character to become 
 	// Current render target
 	this.addCommandID("character_force_talk");
-	onRestart(this);
 
+	onRestart(this);
+	// Might get used if we want to use render:: in character rendering anywhere
 	//id = Render::addScript(Render::layer_posthud, "CharacterHandler.as", "NewRender", 10.0f);
 }
 
