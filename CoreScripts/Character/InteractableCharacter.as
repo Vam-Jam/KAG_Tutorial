@@ -31,10 +31,12 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream@ params)
 	if (cmd == this.getCommandID("TalkingTo"))
 	{
 		BlobCharacter@ char = getCharacter(this);
+		char.ButtonPress();
 
+		// Now force our current target to be talked to
 		CBitStream cbs = CBitStream();
 		cbs.write_u16(this.getNetworkID());
-		getRules().SendCommand(getRules().getCommandID("character_test"), cbs);
+		getRules().SendCommand(getRules().getCommandID("character_force_talk"), cbs);
 	}
 }
 

@@ -137,6 +137,7 @@ class BlobCharacter : Character
 {
 	string CharacterTextureFile = "";
 	string HeadTextureFile = "";
+	string NextInteractKey = "";
 	CBlob@ OwnerBlob; 
 
 	s32 HeadIndex = 0; 
@@ -175,8 +176,14 @@ class BlobCharacter : Character
 			string main = cf.read_string("main");
 			
 			AddResponse("main", main);
-			SetCurrentResponse("main");
+			NextInteractKey = "main";
 		}
+	}
+
+	// Called when user interacts with said target
+	void ButtonPress() 
+	{
+		SetCurrentResponse(NextInteractKey);
 	}
 
 	void CustomTextUpdate()

@@ -18,8 +18,9 @@ void onInit(CRules@ this)
 	// This will be called when a blob dies
 	// This is required unless you want the game to crash
 	this.addCommandID("character_unbound");
-	// Temp bind
-	this.addCommandID("character_test");
+	// This will force the current character to become 
+	// Current render target
+	this.addCommandID("character_force_talk");
 	onRestart(this);
 
 	//id = Render::addScript(Render::layer_posthud, "CharacterHandler.as", "NewRender", 10.0f);
@@ -98,7 +99,7 @@ void onCommand(CRules@ this, u8 cmd, CBitStream@ params)
 
 		Handler.RemoveCharacter(blob);
 	}
-	else if (cmd == this.getCommandID("character_test"))
+	else if (cmd == this.getCommandID("character_force_talk"))
 	{
 		u16 networkId = params.read_u16();
 		CBlob@ blob = getBlobByNetworkID(networkId);
