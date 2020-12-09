@@ -48,7 +48,7 @@ bool AddSpawnsCosmeticOnly(CMap@ map, string markerName, string blobToSpawn, int
 
 
 
-CBlob@ SpawnInCharacter(string blobName, int team, Vec2f pos, string characterName, bool onInit = true, string customBody = "")
+/*CBlob@ SpawnInCharacter(string blobName, int team, Vec2f pos, string characterName, bool onInit = true, string customBody = "")
 {
 	CBlob@ blob = null;
 
@@ -77,13 +77,10 @@ CBlob@ SpawnInCharacter(string blobName, int team, Vec2f pos, string characterNa
 
 	// Set character data
 	BlobCharacter@ character = BlobCharacter(blob, characterName);
-	character.AddResponse("test", "You look stupid and stupid, and you will always be stupid");
-	blob.set("character", character);
-
 	character.PushToGlobalHandler();
 
 	return blob;
-}
+}*/
 
 void addCharacterToBlob(CBlob@ blob, string &in characterName, string &in textFile)
 {
@@ -96,6 +93,6 @@ void addCharacterToBlob(CBlob@ blob, string &in characterName, string &in textFi
 	blob.AddScript("InteractableCharacter");
 
 	// Todo -> Load file
-	//BlobCharacter@ character = BlobCharacter(blob, characterName);
-
+	BlobCharacter@ character = BlobCharacter(blob, characterName);
+	character.LoadTextConfig(textFile);
 }
