@@ -80,7 +80,7 @@ CBlob@ SpawnInCharacter(string blobName, int team, Vec2f pos, string characterNa
 	character.AddResponse("test", "You look stupid and stupid, and you will always be stupid");
 	blob.set("character", character);
 
-	character.setCharacter
+	character.PushToGlobalHandler();
 
 	return blob;
 }
