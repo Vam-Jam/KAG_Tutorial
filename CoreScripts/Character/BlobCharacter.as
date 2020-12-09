@@ -132,6 +132,7 @@ mixin class Character
 
 }*/
 
+// TODO -> RENDER CHARACTER NAME
 class BlobCharacter : Character
 {
 	string CharacterTextureFile = "";

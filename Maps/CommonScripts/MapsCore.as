@@ -82,17 +82,21 @@ bool AddSpawnsCosmeticOnly(CMap@ map, string markerName, string blobToSpawn, int
 	return blob;
 }*/
 
-void addCharacterToBlob(CBlob@ blob, string &in characterName, string &in textFile)
+BlobCharacter@ addCharacterToBlob(CBlob@ blob, string &in characterName, string &in textFile)
 {
 	if (blob.hasScript("InteractableCharacter"))
 	{
 		error("Trying to add a script to a blob that already has InteractableCharacter.as");
-		return;
+		return null;
 	}
 
 	blob.AddScript("InteractableCharacter");
 
-	// Todo -> Load file
 	BlobCharacter@ character = BlobCharacter(blob, characterName);
 	character.LoadTextConfig(textFile);
+
+	//owner.set("character", character);
+	character.PushToGlobalHandler();
+
+	return character;
 }

@@ -25,13 +25,12 @@ void GetButtonsFor(CBlob@ this, CBlob@ caller)
 	CButton@ button = caller.CreateGenericButton("$trade$", Vec2f_zero, this, this.getCommandID("TalkingTo"), "Test");
 }
 
+// Todo -> Clean up talking to and the button
 void onCommand(CBlob@ this, u8 cmd, CBitStream@ params)
 {
 	if (cmd == this.getCommandID("TalkingTo"))
 	{
 		BlobCharacter@ char = getCharacter(this);
-
-		char.SetCurrentResponse("test");
 
 		CBitStream cbs = CBitStream();
 		cbs.write_u16(this.getNetworkID());
