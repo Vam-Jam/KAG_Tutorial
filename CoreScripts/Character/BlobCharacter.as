@@ -235,13 +235,9 @@ class BlobCharacterHandler
 
 	// Character we are going to render
 	BlobCharacter@ CharacterToRender = null;
-	
-	// Dunno if we need this
-	CMap@ map;
 
 	BlobCharacterHandler()
 	{
-		@map = getMap();
 	}
 
 	void AddCharacter(BlobCharacter@ character)
