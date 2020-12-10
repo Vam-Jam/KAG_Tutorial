@@ -83,8 +83,12 @@ mixin class Character
 					chars += currentChar;
 					if (currentChar == "$")
 					{
-						// Add in the next char so adding a token doesnt waste a text update
-						chars = CurrentText.substr(a + 1, 1);
+						string temp = CurrentText.substr(a + 1, 1);
+						if (isSpecialChar(temp))
+							chars = "";
+						else
+							chars = temp;
+							
 						break;
 					}
 				}
@@ -93,7 +97,7 @@ mixin class Character
 			{
 				// TODO -> Make more pretty
 				string insides = "";
-				string charAfterExit = "";
+
 				for (int a = TextRenderLength + 1; a < CurrentText.length; a++)
 				{
 					string currentChar = CurrentText.substr(a, 1);
@@ -101,7 +105,12 @@ mixin class Character
 					if (currentChar == "}")
 					{
 						// Add in the next char so adding a token doesnt waste a text update
-						charAfterExit = CurrentText.substr(a + 1, 1);
+						string temp = CurrentText.substr(a + 1, 1);
+						if (isSpecialChar(temp))
+							chars = "";
+						else
+							chars = temp;
+
 						break;
 					}
 
@@ -113,17 +122,17 @@ mixin class Character
 
 				if (action == "E_")
 				{
-					chars = "";
 					set_emote(OwnerBlob, Emotes::names.find(content));
+				}
+				else if (action == "S_")
+				{
+					WriteSpeed = parseInt(content);
 				}
 				else if (action == "K_")
 				{
-					chars = "";
-					// TODO set next text
 				}
 
 				TextRenderLength += 2 + action.length + content.length;
-				chars += charAfterExit;
 			}
 			else if (chars != ' ') // TODO -> Set custom audio and sort out what we are doing with audio
 			{
@@ -137,6 +146,12 @@ mixin class Character
 			if (TextRenderLength == CurrentText.length)
 				FinishedWriting = true;
 		}
+	}
+
+
+	bool isSpecialChar(string input)
+	{
+		return (input == "{" || input == "}" || input == "$");
 	}
 
 	void ResetText()
