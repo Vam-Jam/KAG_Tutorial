@@ -15,13 +15,16 @@ mixin class Character
 	string CharacterName = "";
 	
 	// Text that is currently on the screen
-	string CurrentRenderText = "";
+	string CurrentRenderOutput = "";
 	// The whole text that is being written to ^
 	string CurrentText = "";
 	// How fast should we write (needs changing)
 	int WriteSpeed = 1;
 	// Are we done writing?
 	bool FinishedWriting = false;
+
+	// CurrentRenderOutput Total length including special tokens that are not outputted
+	int TextRenderLength = 0;
 
 	void SetName(string name)
 	{
@@ -50,6 +53,7 @@ mixin class Character
 		FinishedWriting = false;
 		CurrentText = getResponse(eventName);
 		WriteSpeed = textSpeed;
+		TextRenderLength = 0;
 	}
 
 	void SetPreferedFont(string name)
@@ -66,25 +70,42 @@ mixin class Character
 	{
 		if (getGameTime() % WriteSpeed == 0)
 		{
-			string char = CurrentText.substr(CurrentRenderText.length, 1);
+			string chars = CurrentText.substr(TextRenderLength, 1);
+			
 
-			// Grab the full token so users dont see a part of it when reading
-			if (char == '$') 
+
+			// Colour tokens
+			if (chars == '$') 
 			{
+				for (int a = TextRenderLength + 1; a < CurrentText.length; a++)
+				{
+					string currentChar = CurrentText.substr(a, 1);
+					chars += currentChar;
+					if (currentChar == "$")
+					{
+						// Add in the next char so adding a token doesnt waste a text update
+						chars = CurrentText.substr(a + 1, 1);
+						break;
+					}
+				}
+			}
+			else if (chars == '{') // Emote/Custom text logic
+			{
+				// TODO -> Make more pretty
 				string insides = "";
 				string charAfterExit = "";
-				for (int a = CurrentRenderText.length + 1; a < CurrentText.length; a++)
+				for (int a = TextRenderLength + 1; a < CurrentText.length; a++)
 				{
-					string currentchar = CurrentText.substr(a, 1);
+					string currentChar = CurrentText.substr(a, 1);
 				
-					if (currentchar == "$")
+					if (currentChar == "}")
 					{
 						// Add in the next char so adding a token doesnt waste a text update
 						charAfterExit = CurrentText.substr(a + 1, 1);
 						break;
 					}
 
-					insides += currentchar;
+					insides += currentChar;
 				}
 
 				string action = insides.substr(0, 2);
@@ -92,38 +113,35 @@ mixin class Character
 
 				if (action == "E_")
 				{
-					char = "";
+					chars = "";
 					set_emote(OwnerBlob, Emotes::names.find(content));
 				}
 				else if (action == "K_")
 				{
-					char = "";
+					chars = "";
 					// TODO set next text
-
-				}
-				else
-				{
-					char += action + "$";
 				}
 
-				char += charAfterExit;
+				TextRenderLength += 2 + action.length + content.length;
+				chars += charAfterExit;
 			}
-			else if (char != ' ') // TODO -> Set custom audio and sort out what we are doing with audio
+			else if (chars != ' ') // TODO -> Set custom audio and sort out what we are doing with audio
 			{
 				Sound::Play("Archer_blip" + (XORRandom(1) == 0 ? "_2" : ""));
 			}
 
-			CurrentRenderText += char;
+			CurrentRenderOutput += chars;
+			TextRenderLength += chars.length;
 
 			// Need to fix (tokens excluding colours will make this invalid)
-			if (CurrentRenderText.length == CurrentText.length)
+			if (TextRenderLength == CurrentText.length)
 				FinishedWriting = true;
 		}
 	}
 
 	void ResetText()
 	{
-		CurrentRenderText = "";
+		CurrentRenderOutput = "";
 	}
 
 	void RenderBox(Vec2f &in topLeft) 
@@ -146,7 +164,7 @@ mixin class Character
 
 		// Render font (and make sure we set the font they want before hand)
 		GUI::SetFont(PreferedFont);
-		GUI::DrawText(CurrentRenderText, Vec2f(topLeft.x + 25, topLeft.y + 10), 
+		GUI::DrawText(CurrentRenderOutput, Vec2f(topLeft.x + 25, topLeft.y + 10), 
 			Vec2f(rectangleWidth - 25, botRight.y + 6), SColor(255, 255, 255, 255), false, false, false);
 	}
 }
@@ -245,6 +263,7 @@ class BlobCharacter : Character
 		CharacterPortrait(topLeft);
 	}
 
+	// TODO: Character head is empty the first few ticks
 	void CharacterPortrait(Vec2f &in topLeft)
 	{
 		// Get character head pos
