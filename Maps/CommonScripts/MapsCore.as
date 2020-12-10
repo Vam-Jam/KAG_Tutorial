@@ -94,8 +94,6 @@ BlobCharacter@ addCharacterToBlob(CBlob@ blob, string &in characterName, string 
 
 	BlobCharacter@ character = BlobCharacter(blob, characterName);
 	character.LoadTextConfig(textFile);
-
-	//owner.set("character", character);
 	character.PushToGlobalHandler();
 
 	return character;

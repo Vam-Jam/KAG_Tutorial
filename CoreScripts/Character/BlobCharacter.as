@@ -1,5 +1,7 @@
 //#include "CharacterCore"
 
+#include "EmotesCommon"
+
 int SCREEN_HEIGHT = 0;
 int SCREEN_WIDTH  = 0;
 
@@ -69,18 +71,42 @@ mixin class Character
 			// Grab the full token so users dont see a part of it when reading
 			if (char == '$') 
 			{
+				string insides = "";
+				string charAfterExit = "";
 				for (int a = CurrentRenderText.length + 1; a < CurrentText.length; a++)
 				{
 					string currentchar = CurrentText.substr(a, 1);
-					char += currentchar;
-
-					if (currentchar == "$") 
+				
+					if (currentchar == "$")
 					{
 						// Add in the next char so adding a token doesnt waste a text update
-						char += CurrentText.substr(a + 1, 1);
+						charAfterExit = CurrentText.substr(a + 1, 1);
 						break;
 					}
+
+					insides += currentchar;
 				}
+
+				string action = insides.substr(0, 2);
+				string content = insides.substr(2, insides.length);
+
+				if (action == "E_")
+				{
+					char = "";
+					set_emote(OwnerBlob, Emotes::names.find(content));
+				}
+				else if (action == "K_")
+				{
+					char = "";
+					// TODO set next text
+
+				}
+				else
+				{
+					char += action + "$";
+				}
+
+				char += charAfterExit;
 			}
 			else if (char != ' ') // TODO -> Set custom audio and sort out what we are doing with audio
 			{
@@ -89,6 +115,7 @@ mixin class Character
 
 			CurrentRenderText += char;
 
+			// Need to fix (tokens excluding colours will make this invalid)
 			if (CurrentRenderText.length == CurrentText.length)
 				FinishedWriting = true;
 		}
