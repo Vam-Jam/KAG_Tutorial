@@ -1,13 +1,8 @@
-///////////////////////////////////////////////////////////
-////
-////  Character Core 
-////
-////  This contains a classes that is used to create
-////  characters with text dialogue. 
-////
-////  HEAVILY IN WIP
-////
-///////////////////////////////////////////////////////////
+
+#include "EmotesCommon"
+
+int SCREEN_HEIGHT = 0;
+int SCREEN_WIDTH  = 0;
 
 mixin class Character 
 {
@@ -19,13 +14,16 @@ mixin class Character
 	string CharacterName = "";
 	
 	// Text that is currently on the screen
-	string CurrentRenderText = "";
+	string CurrentRenderOutput = "";
 	// The whole text that is being written to ^
 	string CurrentText = "";
 	// How fast should we write (needs changing)
 	int WriteSpeed = 1;
 	// Are we done writing?
 	bool FinishedWriting = false;
+
+	// CurrentRenderOutput Total length including special tokens that are not outputted
+	int TextRenderLength = 0;
 
 	void SetName(string name)
 	{
@@ -34,7 +32,7 @@ mixin class Character
 
 	void AddResponse(string eventName, string text)
 	{
-		ResponseMap.set(eventName, text);
+		ResponseMap.set(eventName, getTranslatedString(text));
 	}
 
 	string getResponse(string eventName)
@@ -54,6 +52,7 @@ mixin class Character
 		FinishedWriting = false;
 		CurrentText = getResponse(eventName);
 		WriteSpeed = textSpeed;
+		TextRenderLength = 0;
 	}
 
 	void SetPreferedFont(string name)
@@ -70,57 +69,124 @@ mixin class Character
 	{
 		if (getGameTime() % WriteSpeed == 0)
 		{
-			string char = CurrentText.substr(CurrentRenderText.length, 1);
+			string chars = CurrentText.substr(TextRenderLength, 1);
+			
 
-			// Grab the full token so users dont see a part of it when reading
-			if (char == '$') 
+
+			// Colour tokens
+			if (chars == '$') 
 			{
-				for (int a = CurrentRenderText.length + 1; a < CurrentText.length; a++)
+				for (int a = TextRenderLength + 1; a < CurrentText.length; a++)
 				{
-					string currentchar = CurrentText.substr(a, 1);
-					char += currentchar;
-
-					if (currentchar == "$") 
+					string currentChar = CurrentText.substr(a, 1);
+					chars += currentChar;
+					if (currentChar == "$")
 					{
-						// Add in the next char so adding a token doesnt waste a text update
-						char += CurrentText.substr(a + 1, 1);
+						string temp = CurrentText.substr(a + 1, 1);
+						if (isSpecialChar(temp))
+							chars = "";
+						else
+							chars = temp;
+							
 						break;
 					}
 				}
 			}
-			else if (char != ' ') // TODO -> Set custom audio and sort out what we are doing with audio
+			else if (chars == '{') // Emote/Custom text logic
+			{
+				// TODO -> Make more pretty
+				string insides = "";
+
+				for (int a = TextRenderLength + 1; a < CurrentText.length; a++)
+				{
+					string currentChar = CurrentText.substr(a, 1);
+				
+					if (currentChar == "}")
+					{
+						// Add in the next char so adding a token doesnt waste a text update
+						string temp = CurrentText.substr(a + 1, 1);
+						if (isSpecialChar(temp))
+							chars = "";
+						else
+							chars = temp;
+
+						break;
+					}
+
+					insides += currentChar;
+				}
+
+				string action = insides.substr(0, 2);
+				string content = insides.substr(2, insides.length);
+
+				if (action == "E_")
+				{
+					set_emote(OwnerBlob, Emotes::names.find(content));
+				}
+				else if (action == "S_")
+				{
+					WriteSpeed = parseInt(content);
+				}
+				else if (action == "K_")
+				{
+				}
+
+				TextRenderLength += 2 + action.length + content.length;
+			}
+			else if (chars != ' ') // TODO -> Set custom audio and sort out what we are doing with audio
 			{
 				Sound::Play("Archer_blip" + (XORRandom(1) == 0 ? "_2" : ""));
 			}
 
-			CurrentRenderText += char;
+			CurrentRenderOutput += chars;
+			TextRenderLength += chars.length;
 
-			if (CurrentRenderText.length == CurrentText.length)
+			// Need to fix (tokens excluding colours will make this invalid)
+			if (TextRenderLength == CurrentText.length)
 				FinishedWriting = true;
 		}
 	}
 
-	void RenderBox(Vec2f &in topLeft)) 
+
+	bool isSpecialChar(string input)
 	{
+		return (input == "{" || input == "}" || input == "$");
+	}
+
+	void ResetText()
+	{
+		CurrentRenderOutput = "";
+	}
+
+	void RenderBox(Vec2f &in topLeft) 
+	{
+		// Character pane in pixels
+		const Vec2f pane = Vec2f(108, 100);
+		// Text box background
+		const int rectangleWidth = topLeft.x * 5;
+		// Bottom right
+		Vec2f botRight = Vec2f(topLeft.x + pane.x, topLeft.y + pane.y);
+
+		// Pane to the left
+		GUI::DrawFramedPane(topLeft, Vec2f(botRight.x, botRight.y + 8)); 
+
+		// Move the rest slightly right since we got that pane
+		topLeft.x += pane.x;
+
+		// Shadowed box that sits behind the text
+		GUI::DrawRectangle(topLeft, Vec2f(rectangleWidth, botRight.y + 6), SColor(150,0,0,0));
+
+		// Render font (and make sure we set the font they want before hand)
 		GUI::SetFont(PreferedFont);
-		int sHeight = getDriver().getScreenHeight();
-		int sWidth = getDriver().getScreenWidth();
-
-		int leftX = sWidth / 6;
-		int topY = sHeight - (sHeight / 2.5);
-		int hardValue = 120;
-		GUI::DrawFramedPane(Vec2f(leftX, topY), Vec2f(leftX + hardValue, topY + hardValue));
-
-		leftX += hardValue;
-		GUI::DrawRectangle(Vec2f(leftX, topY), Vec2f(leftX + hardValue + 500, topY + hardValue), SColor(150,0,0,0));
-		GUI::DrawText(CurrentRenderText, Vec2f(leftX + 25, topY + 10), Vec2f(leftX + hardValue + 475, topY + hardValue), SColor(255, 255, 255, 255), false, false, false);
+		GUI::DrawText(CurrentRenderOutput, Vec2f(topLeft.x + 25, topLeft.y + 10), 
+			Vec2f(rectangleWidth - 25, botRight.y + 6), SColor(255, 255, 255, 255), false, false, false);
 	}
 }
 
 
 // Chat box used for global chat
 // Not in use yet, will finish later on
-class GlobalCharacter : Character
+/*class GlobalCharacter : Character
 {
 
-}
+}*/
