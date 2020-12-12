@@ -1,7 +1,7 @@
 /// Used so there's less duplicate code with adding a map level
 
 #include "BlobCharacter"
-
+#include "RunnerHead"
 
 // Add in spawns based on a blob
 // Some maps might want you to spawn at a tent
@@ -97,4 +97,57 @@ BlobCharacter@ addCharacterToBlob(CBlob@ blob, string &in characterName, string 
 	character.PushToGlobalHandler();
 
 	return character;
+}
+
+
+// Basic 0 to 255        (70 heads)
+// Flags 256 to 511      (78 heads)
+// Fantasy 512 to 767    (18 heads)
+// Community 768 to 1023 (60 heads)
+// 30 unique heads per pack
+
+namespace Heads
+{
+	const int[] KNIGHT_HELMS = {
+		46,
+		47,
+		48,
+		50,
+		53,
+		54,
+		55,
+		815,
+		819,
+		823,
+		824,
+		825,
+		826
+	};
+}
+
+// Todo, maybe include this with a custom CreateBlob & addCharacter func
+void SetRandomKnightHelm(CBlob@ blob)
+{
+	blob.setHeadNum(Heads::KNIGHT_HELMS[XORRandom(Heads::KNIGHT_HELMS.length)]);
+	LoadHead(blob.getSprite(), blob.getHeadNum());
+	/*switch(XORRandom(10))
+	{
+		// DLC 1
+		case 0:
+			
+		break;
+
+		// DLC 2
+		case 1:
+		break;
+
+		// DLC 3
+		case 2:
+
+		break;
+
+		default:
+			//blob.setHeadNum(1);
+		break;
+	}*/
 }
