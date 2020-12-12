@@ -35,11 +35,8 @@ void onTick(CMap@ map)
 	if (us is null || blob is null)
 		return;
 
-	if (getControls().isKeyPressed(KEY_KEY_Z)) {
-		print(blob.getName() + " | " + blob.getHeadNum());
+	if (getControls().isKeyPressed(KEY_KEY_Z)) 
 		SetRandomKnightHelm(blob);
-		print(blob.getName() + " | " + blob.getHeadNum());
-	}
 }
 
 
