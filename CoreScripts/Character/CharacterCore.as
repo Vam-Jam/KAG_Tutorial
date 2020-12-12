@@ -4,6 +4,8 @@
 int SCREEN_HEIGHT = 0;
 int SCREEN_WIDTH  = 0;
 
+const u16 KEYS_TO_TAKE = key_left | key_right | key_up | key_down | key_action1 | key_action2 | key_action3;
+
 mixin class Character 
 {
 	dictionary ResponseMap = dictionary();
@@ -49,10 +51,15 @@ mixin class Character
 
 	void SetCurrentResponse(string eventName, int textSpeed = 1)
 	{
+		// Clear last render response settings
 		FinishedWriting = false;
-		CurrentText = getResponse(eventName);
-		WriteSpeed = textSpeed;
 		TextRenderLength = 0;
+
+		// Set current response text
+		CurrentText = getResponse(eventName);
+
+		// Note -> This can get changed manually in text
+		WriteSpeed = textSpeed;
 	}
 
 	void SetPreferedFont(string name)
@@ -67,11 +74,12 @@ mixin class Character
 
 	void UpdateText()
 	{
+		
+		LockMovement();
+
 		if (getGameTime() % WriteSpeed == 0)
 		{
 			string chars = CurrentText.substr(TextRenderLength, 1);
-			
-
 
 			// Colour tokens
 			if (chars == '$') 
@@ -180,6 +188,15 @@ mixin class Character
 		GUI::SetFont(PreferedFont);
 		GUI::DrawText(CurrentRenderOutput, Vec2f(topLeft.x + 25, topLeft.y + 10), 
 			Vec2f(rectangleWidth - 25, botRight.y + 6), SColor(255, 255, 255, 255), false, false, false);
+	}
+
+	void LockMovement()
+	{
+		CBlob@ blob = getLocalPlayerBlob();
+		if (blob is null) 
+			return;
+
+		blob.DisableKeys(KEYS_TO_TAKE);
 	}
 }
 
