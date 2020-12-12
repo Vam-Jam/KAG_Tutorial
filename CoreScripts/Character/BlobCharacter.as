@@ -68,16 +68,21 @@ class BlobCharacter : Character
 	{
 		UpdateText();
 
-		// We only need to update this every so often
-		HeadIndex = OwnerBlob.get_s32("head index");
-		Team = OwnerBlob.get_s32("head team");
-		HeadTextureFile = OwnerBlob.get_string("head texture");
+		// Keep watch to update when the char changes head
+		SetHeadData();
 
 		// Disabled for now, looks cursed as fuck
 		/*if (!FinishedWriting && CurrentRenderText.substr(CurrentRenderText.length -2, 1) != " ")
 			testFrame = 1;
 		else
 			testFrame = 0;*/
+	}
+
+	void SetHeadData()
+	{
+		HeadIndex = OwnerBlob.get_s32("head index");
+		Team = OwnerBlob.get_s32("head team");
+		HeadTextureFile = OwnerBlob.get_string("head texture");
 	}
 
 	void CustomRender(Vec2f &in topLeft)
@@ -206,6 +211,7 @@ class BlobCharacterHandler
 				CharacterToRender.ResetText();
 			
 			blob.get("character", @CharacterToRender);
+			CharacterToRender.SetHeadData();
 		}
 	}
 
