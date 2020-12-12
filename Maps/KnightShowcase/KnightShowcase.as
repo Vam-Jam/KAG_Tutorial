@@ -23,6 +23,7 @@ void onRestart(CMap@ this)
 	//SpawnInCharacter("knight", 1, Vec2f(538, 560), "generic knight main");
 	//SpawnInCharacter("archer", 0, Vec2f(555, 560), "generic archer main");
 	//SpawnInCharacter("builder", 3, Vec2f(575, 560), "generic builder main");
+
 	@blob = null;
 	TrySpawnBlob();
 }
@@ -31,8 +32,7 @@ void onTick(CMap@ map)
 {
 	TrySpawnBlob();
 
-	CBlob@ us = getLocalPlayerBlob();
-	if (us is null || blob is null)
+	if (blob is null)
 		return;
 
 	if (getControls().isKeyPressed(KEY_KEY_Z)) 
@@ -53,7 +53,7 @@ void TrySpawnBlob()
 		}
 
 		@blob = server_CreateBlob("knight", 0, Vec2f(538, 560));
-		addCharacterToBlob(blob, "generic knight main", "knight.cfg");
+		addCharacterToBlob(blob, "Kevin the tester", "Kevin.cfg");
 		SetRandomKnightHelm(blob);
 	}
 }
