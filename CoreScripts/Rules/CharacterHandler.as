@@ -23,6 +23,7 @@ void onInit(CRules@ this)
 	this.addCommandID("character_force_talk");
 
 	onRestart(this);
+
 	// Might get used if we want to use render:: in character rendering anywhere
 	//id = Render::addScript(Render::layer_posthud, "CharacterHandler.as", "NewRender", 10.0f);
 }
@@ -36,10 +37,7 @@ void onRestart(CRules@ this)
 }
 
 void onReload(CRules@ this)
-{
-	//Render::RemoveScript(id);
-	//id = Render::addScript(Render::layer_posthud, "CharacterHandler.as", "NewRender", 10.0f);
-	
+{	
 	if (Handler !is null) 
 		Handler.Clear();
 
@@ -63,7 +61,6 @@ void onReload(CRules@ this)
 		Handler.AddCharacter(char);
 	}
 	// End
-
 }
 
 void onTick(CRules@ this)
@@ -74,6 +71,10 @@ void onTick(CRules@ this)
 
 void onCommand(CRules@ this, u8 cmd, CBitStream@ params)
 {
+
+	if (Handler is null)
+		return;
+
 	if (cmd == this.getCommandID("character_bound"))
 	{
 		u16 networkId = params.read_u16();

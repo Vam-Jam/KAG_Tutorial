@@ -2,6 +2,8 @@
 
 void onInit(CMap@ this)
 {
+	string AveriaSerif = CFileMatcher("AveriaSerif-Bold.ttf").getFirst();
+	GUI::LoadFont("AveriaSerif-Bold_22", AveriaSerif, 22, true);
 	onRestart(this);
 }
 

@@ -64,9 +64,9 @@ class BlobCharacter : Character
 		SetCurrentResponse(NextInteractKey);
 	}
 
-	void CustomTextUpdate()
+	void CustomUpdate()
 	{
-		UpdateText();
+		Update();
 
 		// Keep watch to update when the char changes head
 		SetHeadData();
@@ -208,7 +208,7 @@ class BlobCharacterHandler
 		if (index != -1)
 		{
 			if (CharacterToRender !is null)
-				CharacterToRender.ResetText();
+				CharacterToRender.ResetTalkVars();
 			
 			blob.get("character", @CharacterToRender);
 			CharacterToRender.SetHeadData();
@@ -237,8 +237,7 @@ class BlobCharacterHandler
 		if (CharacterToRender is null && !FindAndSetToSpeak())
 			return;
 
-		if (!CharacterToRender.FinishedWriting)
-			CharacterToRender.CustomTextUpdate();
+		CharacterToRender.Update();
 	}
 
 	void UpdateScreenVars()
