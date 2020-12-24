@@ -11,7 +11,7 @@ mixin class Character
 	dictionary ResponseMap = dictionary();
 	
 	// Maybe you want this character to have a custom font
-	string PreferedFont = "Menu";
+	string PreferedFont = "test123";
 	// Custom character name
 	string CharacterName = "";
 	
@@ -212,30 +212,32 @@ mixin class Character
 	}
 
 
-	void RenderBox(Vec2f &in topLeft) 	
+	void RenderBox() 	
 	{
+		//
+		Vec2f topLeft(0,0);
 		// Character pane in pixels
 		const Vec2f pane = Vec2f(108, 100);
 		// Text box background
-		const int rectangleWidth = topLeft.x * 5;
+		const int rectangleWidth = getDriver().getScreenWidth();
 		// Bottom right
-		Vec2f botRight = Vec2f(topLeft.x + pane.x, topLeft.y + pane.y);
+		Vec2f botRight = Vec2f(topLeft.x + pane.x, topLeft.y + pane.y + 8);
 
 		// Pane to the left
-		GUI::DrawFramedPane(topLeft, Vec2f(botRight.x, botRight.y + 8)); 
+		GUI::DrawFramedPane(topLeft, Vec2f(botRight.x, botRight.y)); 
 
 		// Move the rest slightly right since we got that pane
 		topLeft.x += pane.x;
 
 		// Shadowed box that sits behind the text
-		GUI::DrawRectangle(topLeft, Vec2f(rectangleWidth, botRight.y + 6), SColor(150,0,0,0));
+		GUI::DrawRectangle(topLeft, Vec2f(rectangleWidth, botRight.y), SColor(200,0,0,0));
 
 		// Render font (and make sure we set the font they want before hand)
 		GUI::SetFont(PreferedFont);
-		GUI::DrawText(CurrentRenderOutput, Vec2f(topLeft.x + 25, topLeft.y + 10), 
-			Vec2f(rectangleWidth - 25, botRight.y + 6), color_white, true, false, false);
+		GUI::DrawText(CharacterName + " " + CurrentRenderOutput, Vec2f(topLeft.x + 25, topLeft.y + 10), 
+			Vec2f(rectangleWidth - 25, botRight.y - 2), color_white, true, false, false);
 
-		GUI::DrawIcon("GUI/Keys.png", 8, Vec2f(24, 16), Vec2f(rectangleWidth - 25, botRight.y), 1.0f, color_white);
+		//GUI::DrawIcon("GUI/Keys.png", 8, Vec2f(24, 16), Vec2f(rectangleWidth - 25, botRight.y), 1.0f, color_white);
 	}
 }
 

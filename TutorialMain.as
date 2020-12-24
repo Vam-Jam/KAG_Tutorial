@@ -11,6 +11,11 @@ void onInit(CRules@ this)
 	}
 
 	onRestart(this);
+
+
+	// TEMP, PUT IN DIFFERENT FILE
+	AddColorToken("$T_D$", color_white);
+	AddColorToken("$T_0$", SColor(255, 25, 140, 255));
 }
 
 void onRestart(CRules@ this)
@@ -97,6 +102,20 @@ Vec2f getSpawnLocation(CPlayer@ player)
 	return Vec2f(0, 0);
 }
 
+bool wasClicking = false;
+Vec2f lastMousePos = Vec2f(0,0);
+bool mousePressed = false;
+
+void onTick(CRules@ this)
+{
+	GUI::LoadFont("test123", CFileMatcher("uni0553.ttf").getFirst(), 16, true);
+	// TODO: DISABLE BOXES AND OTHER JUNK THAT WE DONT NEED FOR NOW
+	if (g_debug != 0)
+	{
+		
+	}
+}
+
 
 void onRender(CRules@ this)
 {
@@ -152,13 +171,4 @@ void RenderSquare(Vec2f currentPos)
 	{
 		print("\nSector pos:\nVec2f" + topLeft +"\nVec2f" + botRight, SColor(255, 255, 100, 255));
 	}
-}
-
-bool wasClicking = false;
-Vec2f lastMousePos = Vec2f(0,0);
-bool mousePressed = false;
-
-void onTick(CRules@ this)
-{
-
 }

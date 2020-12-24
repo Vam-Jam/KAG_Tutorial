@@ -17,7 +17,9 @@ class BlobCharacter : Character
 	BlobCharacter(CBlob@ owner, string name)
 	{
 		@OwnerBlob = owner;
-		SetName(name);
+
+		int team = owner.getTeamNum();
+		SetName("$T_"+team+"$<"+name+">$T_D$");
 
 		owner.set("character", @this);
 
@@ -85,15 +87,16 @@ class BlobCharacter : Character
 		HeadTextureFile = OwnerBlob.get_string("head texture");
 	}
 
-	void CustomRender(Vec2f &in topLeft)
+	void CustomRender()
 	{
-		RenderBox(topLeft);
-		CharacterPortrait(topLeft);
+		RenderBox();
+		CharacterPortrait();
 	}
 
 	// TODO: Character head is empty the first few ticks
-	void CharacterPortrait(Vec2f &in topLeft)
+	void CharacterPortrait()
 	{
+		Vec2f topLeft(0, 0);
 		// Get character head pos
 		Vec2f headpos(topLeft.x - 10, topLeft.y - 26);
 
@@ -254,9 +257,7 @@ class BlobCharacterHandler
 		if (CharacterToRender is null)
 			return;
 
-		Vec2f topLeft(SCREEN_WIDTH / 6, SCREEN_HEIGHT - (SCREEN_HEIGHT / 2.5));
-
-		CharacterToRender.CustomRender(topLeft);
+		CharacterToRender.CustomRender();
 	}
 
 	// Todo: some other stuff?
