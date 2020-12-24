@@ -12,8 +12,6 @@ void onInit(CBlob@ this)
 		this.RemoveScript("InteractableCharacter");
 		return;
 	}
-
-	this.addCommandID("TalkingTo");
 }
 
 void GetButtonsFor(CBlob@ this, CBlob@ caller)
@@ -22,22 +20,17 @@ void GetButtonsFor(CBlob@ this, CBlob@ caller)
 	if (caller is null || this.hasTag("dead"))
 		return;
 
-	CButton@ button = caller.CreateGenericButton("$trade$", Vec2f_zero, this, this.getCommandID("TalkingTo"), "Test");
+	CButton@ button = caller.CreateGenericButton("$trade$", Vec2f_zero, this, TryingToTalk, "Test");
 }
 
-// Todo -> Clean up talking to and the button
-void onCommand(CBlob@ this, u8 cmd, CBitStream@ params)
+void TryingToTalk(CBlob@ this, CBlob@ caller)
 {
-	if (cmd == this.getCommandID("TalkingTo"))
-	{
-		BlobCharacter@ char = getCharacter(this);
-		char.ButtonPress();
+	BlobCharacter@ char = getCharacter(this);
+	char.ButtonPress();
 
-		// Now force our current target to be talked to
-		CBitStream cbs = CBitStream();
-		cbs.write_u16(this.getNetworkID());
-		getRules().SendCommand(getRules().getCommandID("character_force_talk"), cbs);
-	}
+	CBitStream cbs = CBitStream();
+	cbs.write_u16(this.getNetworkID());
+	getRules().SendCommand(getRules().getCommandID("character_force_talk"), cbs);
 }
 
 

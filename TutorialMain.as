@@ -16,6 +16,8 @@ void onInit(CRules@ this)
 	// TEMP, PUT IN DIFFERENT FILE
 	AddColorToken("$T_D$", color_white);
 	AddColorToken("$T_0$", SColor(255, 25, 140, 255));
+
+	GUI::LoadFont("test123", CFileMatcher("uni0553.ttf").getFirst(), 26, true);
 }
 
 void onRestart(CRules@ this)
@@ -108,7 +110,6 @@ bool mousePressed = false;
 
 void onTick(CRules@ this)
 {
-	GUI::LoadFont("test123", CFileMatcher("uni0553.ttf").getFirst(), 16, true);
 	// TODO: DISABLE BOXES AND OTHER JUNK THAT WE DONT NEED FOR NOW
 	if (g_debug != 0)
 	{
