@@ -11,24 +11,33 @@ mixin class Character
 	dictionary ResponseMap = dictionary();
 	
 	// Maybe you want this character to have a custom font
-	string PreferedFont = "test123";
-	// Custom character name
+	//     - Set your own custom font, used before rendering text
+	string PreferedFont = "pixeled";
+
+	// Custom character name, added to the start of the text render
+	//     - Note: Will get changed at some point
 	string CharacterName = "";
-	
+
+	// How fast should we write by default
+	//     - Note: text cfg's can change this with "{S_NUM}"
+	int WriteSpeed = 1;
+
+	// Are we done writing text?
+	//     - Used to know if text is done updating
+	bool FinishedWriting = false;
+
+	// Is the client done talking to us?
+	//     - Used to end talking to the character (gui goes bye)
+	bool FinishedTalking = false;
+
+	// CurrentRenderOutput Total length including special tokens that are not outputted
+	//     - Used when updating text so we can grab the correct substr
+	int TextRenderLength = 0;
+
 	// Text that is currently on the screen
 	string CurrentRenderOutput = "";
 	// The whole text that is being written to ^
 	string CurrentText = "";
-	// How fast should we write (needs changing)
-	int WriteSpeed = 1;
-
-	// Are we done writing text?
-	bool FinishedWriting = false;
-	// Is the client done talking to us?
-	bool FinishedTalking = false;
-
-	// CurrentRenderOutput Total length including special tokens that are not outputted
-	int TextRenderLength = 0;
 
 	void SetName(string name)
 	{
@@ -40,6 +49,7 @@ mixin class Character
 		ResponseMap.set(eventName, getTranslatedString(text));
 	}
 
+	// Both getResponses do the same thing, but give the string back in different ways
 	string getResponse(string eventName)
 	{
 		string text = "";
@@ -54,13 +64,8 @@ mixin class Character
 
 	void SetCurrentResponse(string eventName, int textSpeed = 1)
 	{
-		// Clear last render response settings
 		ResetTalkVars();
-
-		// Set current response text
 		CurrentText = getResponse(eventName);
-
-		// Note -> This can get changed manually in text
 		WriteSpeed = textSpeed;
 	}
 
@@ -111,6 +116,7 @@ mixin class Character
 		}
 	}
 
+	// TODO: Clean, fix some 'hacky/temp' stuff
 	void UpdateText()
 	{
 		string chars = CurrentText.substr(TextRenderLength, 1);

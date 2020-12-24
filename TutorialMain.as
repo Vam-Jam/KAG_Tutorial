@@ -1,10 +1,17 @@
 // Simple rules logic script
-// no define required, localhost only, clients will be running this
+// No define required, localhost only, clients will be running this regardless
+
+// This whole script is incomplete, it will be ugly until then
+
+
+// TEMP
+bool wasClicking = false;
+Vec2f lastMousePos = Vec2f(0,0);
+bool mousePressed = false;
+// END
 
 void onInit(CRules@ this)
 {
-	this.AddScript("AutoRebuild.as"); // DEBUG -- REMEBER TO REMOVE 
-
 	if (!this.exists("default class"))
 	{
 		this.set_string("default class", "knight");
@@ -17,7 +24,7 @@ void onInit(CRules@ this)
 	AddColorToken("$T_D$", color_white);
 	AddColorToken("$T_0$", SColor(255, 25, 140, 255));
 
-	GUI::LoadFont("test123", CFileMatcher("uni0553.ttf").getFirst(), 26, true);
+	GUI::LoadFont("pixeled", CFileMatcher("uni0553.ttf").getFirst(), 26, true);
 }
 
 void onRestart(CRules@ this)
@@ -103,10 +110,6 @@ Vec2f getSpawnLocation(CPlayer@ player)
 
 	return Vec2f(0, 0);
 }
-
-bool wasClicking = false;
-Vec2f lastMousePos = Vec2f(0,0);
-bool mousePressed = false;
 
 void onTick(CRules@ this)
 {
