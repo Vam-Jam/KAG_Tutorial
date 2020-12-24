@@ -238,6 +238,9 @@ class BlobCharacterHandler
 			return;
 
 		CharacterToRender.Update();
+
+		if (CharacterToRender.FinishedTalking)
+			@CharacterToRender = @null;
 	}
 
 	void UpdateScreenVars()
