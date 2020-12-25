@@ -1,10 +1,13 @@
 #include "CharacterCore"
 
+/// Characters but for blobs
+/// Add's stuff like names
+/// Character portrait/border
+
 class BlobCharacter : Character
 {
 	string CharacterTextureFile = "";
 	string HeadTextureFile = "";
-	string NextInteractKey = "";
 	CBlob@ OwnerBlob; 
 
 	s32 HeadIndex = 0; 
@@ -30,39 +33,6 @@ class BlobCharacter : Character
 			CharacterTextureFile = owner.get_string("custom_body");
 		else
 			CharacterTextureFile = owner.getName() + (owner.getSexNum() == 0 ? "_male_body.png" : "_female_body.png");
-	}
-
-	void LoadTextConfig(string configName)
-	{
-		ConfigFile cf = ConfigFile(CFileMatcher(configName).getFirst());
-		if (cf is null)
-		{
-			error("AttachedTextConfig " + configName + " is null (attached to character  " + CharacterName + ")");
-			return;
-		}
-
-		if (cf.exists("main")) {
-			string main = cf.read_string("main");
-			
-			AddResponse("main", main);
-			NextInteractKey = "main";
-		}
-
-		// Temp work around until cfg has a get all keys func (would be named keys, but its an illegal name >:( )
-		string[] configKeys = cf.read_string("keys").split(';');
-
-		// Todo -> error if not found
-		for (int a = 0; a < configKeys.length; a++)
-		{
-			string text = cf.read_string(configKeys[a]);
-			AddResponse(configKeys[a], text);
-		}
-	}
-
-	// Called when user interacts with said target
-	void ButtonPress() 
-	{
-		SetCurrentResponse(NextInteractKey);
 	}
 
 	void CustomUpdate()
@@ -222,7 +192,7 @@ class BlobCharacterHandler
 		for (int a = 0; a < BlobList.length; a++)
 		{
 			BlobCharacter@ char = BlobList[a];
-			if (char.CurrentText != "")
+			if (char !is null && char.CurrentText != "")
 			{
 				@CharacterToRender = char;
 				return true;

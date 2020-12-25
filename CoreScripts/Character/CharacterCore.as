@@ -38,6 +38,8 @@ mixin class Character
 	string CurrentRenderOutput = "";
 	// The whole text that is being written to ^
 	string CurrentText = "";
+	// Name of the something
+	string NextInteractKey = "";
 
 	void SetName(string name)
 	{
@@ -85,6 +87,39 @@ mixin class Character
 	const string getName()
 	{
 		return CharacterName;
+	}
+
+	void LoadTextConfig(string configName)
+	{
+		ConfigFile cf = ConfigFile(CFileMatcher(configName).getFirst());
+		if (cf is null)
+		{
+			error("AttachedTextConfig " + configName + " is null (attached to character  " + CharacterName + ")");
+			return;
+		}
+
+		if (cf.exists("main")) {
+			string main = cf.read_string("main");
+			
+			AddResponse("main", main);
+			NextInteractKey = "main";
+		}
+
+		// Temp work around until cfg has a get all keys func (would be named keys, but its an illegal name >:( )
+		string[] configKeys = cf.read_string("keys").split(';');
+
+		// Todo -> error if not found
+		for (int a = 0; a < configKeys.length; a++)
+		{
+			string text = cf.read_string(configKeys[a]);
+			AddResponse(configKeys[a], text);
+		}
+	}
+
+	// Called when user interacts with said target
+	void ButtonPress() 
+	{
+		SetCurrentResponse(NextInteractKey);
 	}
 
 	void Update()
