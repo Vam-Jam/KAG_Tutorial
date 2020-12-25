@@ -169,7 +169,7 @@ mixin class Character
 					if (isSpecialChar(temp))
 						chars = "";
 					else
-						chars = temp;
+						chars += temp;
 						
 					break;
 				}
