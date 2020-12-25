@@ -48,14 +48,22 @@ void TrySpawnBlob()
 	if (blob is null)
 	{
 		CBlob@[] list;
-		getBlobsByName("knight", list);
+		getBlobs(@list);
 		for (int a = 0; a < list.length(); a++)
 		{
-			list[a].server_Die();
+			CBlob@ temp = list[a];
+			if (temp is null || temp.getPlayer() !is null)
+				continue;
+
+			if (temp.getName() == "knight" || temp.getName() == "bush") 
+				temp.server_Die();
 		}
 
 		@blob = server_CreateBlob("knight", 0, Vec2f(538, 560));
 		addCharacterToBlob(blob, "Kevin the tester", "Kevin.cfg");
 		SetRandomKnightHelm(blob);
+
+		@blob = server_CreateBlob("bush", 0, Vec2f(144, 579));
+		addCharacterToBlob(blob, "Soren the bush", "Soren.cfg");
 	}
 }

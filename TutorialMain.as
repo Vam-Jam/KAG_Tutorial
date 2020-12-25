@@ -23,6 +23,7 @@ void onInit(CRules@ this)
 	// TEMP, PUT IN DIFFERENT FILE
 	AddColorToken("$T_D$", color_white);
 	AddColorToken("$T_0$", SColor(255, 25, 140, 255));
+	AddColorToken("$green$", SColor(255, 100, 255, 100));
 
 	GUI::LoadFont("pixeled", CFileMatcher("uni0553.ttf").getFirst(), 26, true);
 }
