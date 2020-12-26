@@ -34,6 +34,8 @@ mixin class Character
 	//     - Used when updating text so we can grab the correct substr
 	int TextRenderLength = 0;
 
+	// Text render queue, when one is over done, the next will be pushed
+	string[] ActiveResponseQueue;
 	// Text that is currently on the screen
 	string CurrentRenderOutput = "";
 	// The whole text that is being written to ^
@@ -64,11 +66,45 @@ mixin class Character
 		ResponseMap.get(eventName, text);
 	}
 
-	void SetCurrentResponse(string eventName, int textSpeed = 1)
+	void AddToResponseQueue(string eventName)
 	{
+		ActiveResponseQueue.push_back(getResponse(eventName));
+
+		FrontToOutput();
+	}
+
+	void ClearResponseQueue()
+	{
+		ActiveResponseQueue.clear();
+	}
+
+	bool LoadNextInQueue()
+	{
+		if (ActiveResponseQueue.length < 2)
+			return false;
+
+		RemoveFrontOfQueue();
+		FrontToOutput();
+
+		return true;
+	}
+
+	void RemoveFrontOfQueue()
+	{
+		if (ActiveResponseQueue.isEmpty())
+			return;
+
+		ActiveResponseQueue.erase(0);
+	}
+
+	// Todo: rename to something better
+	void FrontToOutput()
+	{
+		if (ActiveResponseQueue.isEmpty())
+			return;
+		
+		CurrentText = ActiveResponseQueue[0];
 		ResetTalkVars();
-		CurrentText = getResponse(eventName);
-		WriteSpeed = textSpeed;
 	}
 
 	void ResetTalkVars()
@@ -110,7 +146,8 @@ mixin class Character
 		// Optional
 		if (cf.exists("keys"))
 		{
-			// Temp work around until cfg has a get all keys func (would be named keys, but its an illegal name >:( )
+			// Temp work around until cfg has a get all keys func (would be named keys, but its an illegal name >:(
+			// Might crash here on empty box
 			string[] configKeys = cf.read_string("keys").split(';');
 
 			// Todo -> error if not found
@@ -125,28 +162,34 @@ mixin class Character
 	// Called when user interacts with said target
 	void ButtonPress() 
 	{
-		SetCurrentResponse(NextInteractKey);
+		AddToResponseQueue(NextInteractKey);
 	}
 
 	void Update()
 	{
 		CBlob@ blob = getLocalPlayerBlob();
 		if (blob is null || FinishedTalking) 
-			return;
+			return;	
+
 
 		LockMovement(blob);
-		bool skip = ClientInputs();
+		bool spacebarPressed = ClientInputs();
 
-		if (skip)
+		if (spacebarPressed)
 		{
-			// Fix loud audio when skipping
+			// Speed up writing
 			if (!FinishedWriting)
 			{
 				while(!FinishedWriting)
-					UpdateText();
+					UpdateText(true);
+			}
+			else if (LoadNextInQueue())
+			{
+				UpdateText();
 			}
 			else
 			{
+				// User stops talking, gui closes
 				FinishedTalking = true;
 			}
 		}
@@ -158,7 +201,7 @@ mixin class Character
 	}
 
 	// TODO: Clean, fix some 'hacky/temp' stuff
-	void UpdateText()
+	void UpdateText(bool skip = false)
 	{
 		string chars = CurrentText.substr(TextRenderLength, 1);
 
@@ -216,13 +259,15 @@ mixin class Character
 			{
 				WriteSpeed = parseInt(content);
 			}
-			else if (action == "K_")
+			else if (action == "R_")
 			{
+
 			}
 
 			TextRenderLength += 2 + action.length + content.length;
 		}
-		else if (chars != ' ') // TODO -> Set custom audio and sort out what we are doing with audio
+		
+		if (chars != ' ' && !skip) // TODO -> Set custom audio and sort out what we are doing with audio
 		{
 			Sound::Play("Archer_blip" + (XORRandom(1) == 0 ? "_2" : ""));
 		}
@@ -232,7 +277,10 @@ mixin class Character
 
 		// Need to fix (tokens excluding colours will make this invalid)
 		if (TextRenderLength == CurrentText.length)
+		{
+			RemoveFrontOfQueue();
 			FinishedWriting = true;
+		}
 	}
 
 	// TEMP
@@ -261,12 +309,15 @@ mixin class Character
 
 	void RenderBox() 	
 	{
-		//
 		Vec2f topLeft(0,0);
+
 		// Character pane in pixels
 		const Vec2f pane = Vec2f(108, 100);
+
 		// Text box background
+		// Todo -> update screenwidth every tick
 		const int rectangleWidth = getDriver().getScreenWidth();
+
 		// Bottom right
 		Vec2f botRight = Vec2f(topLeft.x + pane.x, topLeft.y + pane.y + 8);
 

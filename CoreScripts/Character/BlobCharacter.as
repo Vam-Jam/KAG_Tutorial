@@ -119,15 +119,12 @@ class BlobCharacterHandler
 		}
 
 		if (CharacterToRender is character)
-		{
 			@CharacterToRender = null;
-		}
+
 
 		int index = getBlobIndex(character);
 		if (index != -1)
-		{
 			BlobList.erase(index);
-		}
 	}
 
 	int getBlobIndex(BlobCharacter@ char)
