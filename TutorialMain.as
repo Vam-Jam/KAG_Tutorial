@@ -19,7 +19,6 @@ void onInit(CRules@ this)
 
 	onRestart(this);
 
-
 	// TEMP, PUT IN DIFFERENT FILE
 	AddColorToken("$T_D$", color_white);
 	AddColorToken("$T_0$", SColor(255, 25, 140, 255));
