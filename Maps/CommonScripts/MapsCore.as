@@ -114,7 +114,7 @@ BlobCharacter@ addCharacterToBlob(CBlob@ blob, string &in characterName, string 
 
 namespace Heads
 {
-	const int[] KNIGHT_HELMS = {
+	const int[] KNIGHT_WITH_HELMS = {
 		46,
 		47,
 		48,
@@ -134,7 +134,7 @@ namespace Heads
 // Todo, maybe include this with a custom CreateBlob & addCharacter func
 void SetRandomKnightHelm(CBlob@ blob)
 {
-	blob.setHeadNum(Heads::KNIGHT_HELMS[XORRandom(Heads::KNIGHT_HELMS.length)]);
+	blob.setHeadNum(Heads::KNIGHT_WITH_HELMS[XORRandom(Heads::KNIGHT_WITH_HELMS.length)]);
 	LoadHead(blob.getSprite(), blob.getHeadNum());
 	/*switch(XORRandom(10))
 	{
