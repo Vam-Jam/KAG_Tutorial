@@ -68,8 +68,11 @@ mixin class Character
 
 	void AddToResponseQueue(string eventName)
 	{
-		ActiveResponseQueue.push_back(getResponse(eventName));
+		string response = getResponse(eventName);
+		if (response == "")
+			return;
 
+		ActiveResponseQueue.push_back(response);
 		FrontToOutput();
 	}
 
@@ -100,9 +103,9 @@ mixin class Character
 	// Todo: rename to something better
 	void FrontToOutput()
 	{
-		if (ActiveResponseQueue.isEmpty())
+		if (ActiveResponseQueue.isEmpty() || CurrentText == ActiveResponseQueue[0])
 			return;
-		
+
 		CurrentText = ActiveResponseQueue[0];
 		ResetTalkVars();
 	}
@@ -154,7 +157,8 @@ mixin class Character
 			for (int a = 0; a < configKeys.length; a++)
 			{
 				string text = cf.read_string(configKeys[a]);
-				AddResponse(configKeys[a], text);
+				if (text != "")
+					AddResponse(configKeys[a], text);
 			}
 		}
 	}
@@ -185,6 +189,7 @@ mixin class Character
 			}
 			else if (LoadNextInQueue())
 			{
+				RemoveFrontOfQueue();
 				UpdateText();
 			}
 			else
@@ -261,7 +266,7 @@ mixin class Character
 			}
 			else if (action == "R_")
 			{
-
+				AddToResponseQueue(content);
 			}
 
 			TextRenderLength += 2 + action.length + content.length;
@@ -277,10 +282,7 @@ mixin class Character
 
 		// Need to fix (tokens excluding colours will make this invalid)
 		if (TextRenderLength == CurrentText.length)
-		{
-			RemoveFrontOfQueue();
 			FinishedWriting = true;
-		}
 	}
 
 	// TEMP
