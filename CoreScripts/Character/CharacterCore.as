@@ -115,6 +115,7 @@ mixin class Character
 		FinishedWriting = false;
 		FinishedTalking = false;
 		TextRenderLength = 0;
+		WriteSpeed = 1;
 		CurrentRenderOutput = "";
 	}
 
