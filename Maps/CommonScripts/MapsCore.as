@@ -96,6 +96,12 @@ BlobCharacter@ addCharacterToBlob(CBlob@ blob, string &in characterName, string 
 	character.LoadTextConfig(textFile);
 	character.PushToGlobalHandler();
 
+
+	if (!blob.hasScript("EmoteBubble.as"))
+	{
+		blob.AddScript("EmoteBubble.as");
+	}
+
 	return character;
 }
 
