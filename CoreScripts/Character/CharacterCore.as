@@ -6,8 +6,11 @@ int SCREEN_WIDTH  = 0;
 
 const u16 KEYS_TO_TAKE = key_left | key_right | key_up | key_down | key_action1 | key_action2 | key_action3;
 
+
+
 mixin class Character 
 {
+	// String key, string value
 	dictionary ResponseMap = dictionary();
 	
 	// Maybe you want this character to have a custom font
@@ -40,8 +43,6 @@ mixin class Character
 	string CurrentRenderOutput = "";
 	// The whole text that is being written to ^
 	string CurrentText = "";
-	// Name of the something
-	string NextInteractKey = "";
 
 	void SetName(string name)
 	{
@@ -144,7 +145,7 @@ mixin class Character
 			string main = cf.read_string("main");
 			
 			AddResponse("main", main);
-			NextInteractKey = "main";
+			AddToResponseQueue("main");
 		}
 
 		// Optional
@@ -168,8 +169,6 @@ mixin class Character
 	void ButtonPress() 
 	{
 		ResetTalkVars();
-		ClearResponseQueue();
-		AddToResponseQueue(NextInteractKey);
 	}
 
 	void Update()
@@ -192,7 +191,6 @@ mixin class Character
 			}
 			else if (LoadNextInQueue())
 			{
-				RemoveFrontOfQueue();
 				UpdateText();
 			}
 			else
@@ -223,9 +221,7 @@ mixin class Character
 				if (currentChar == "$")
 				{
 					string temp = CurrentText.substr(a + 1, 1);
-					if (isSpecialChar(temp))
-						chars = "";
-					else
+					if (!isSpecialChar(temp))
 						chars += temp;
 						
 					break;
@@ -234,7 +230,7 @@ mixin class Character
 		}
 		else if (chars == '{') // Emote/Custom text logic
 		{
-			// TODO -> Make more pretty
+			// TODO -> Make more pretty?
 			string insides = "";
 
 			for (int a = TextRenderLength + 1; a < CurrentText.length; a++)
@@ -261,7 +257,10 @@ mixin class Character
 
 			if (action == "E_")
 			{
-				set_emote(OwnerBlob, Emotes::names.find(content));
+				if (OwnerBlob is null)
+					warn("Dont call E_ with none blobs: " + CharacterName);
+				else
+					set_emote(OwnerBlob, Emotes::names.find(content));
 			}
 			else if (action == "S_")
 			{
@@ -270,6 +269,14 @@ mixin class Character
 			else if (action == "R_")
 			{
 				AddToResponseQueue(content);
+			}
+			else if (action == "F_")
+			{
+				CallbackButtonFunc@ func = getFunction(content);
+				if (func is null)
+					warn("Function not found " + content);
+				else
+					func(OwnerBlob, getLocalPlayerBlob()); // TODO -> Pass who called it, not just local player
 			}
 
 			TextRenderLength += 2 + action.length + content.length;

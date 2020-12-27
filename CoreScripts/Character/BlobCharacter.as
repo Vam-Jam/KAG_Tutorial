@@ -6,15 +6,32 @@
 
 class BlobCharacter : Character
 {
+	// String key, func value
+	dictionary FunctionMap = dictionary();
+
 	string CharacterTextureFile = "";
 	string HeadTextureFile = "";
 	CBlob@ OwnerBlob; 
+
+
 
 	s32 HeadIndex = 0; 
 	s32 Team = 0;
 
 	// Not in use
 	u8 testFrame = 0;
+
+	void AddFunction(string name, CallbackButtonFunc@ func)
+	{
+		FunctionMap.set(name, @func);
+	}
+
+	CallbackButtonFunc@ getFunction(string name)
+	{
+		CallbackButtonFunc@ func;
+		FunctionMap.get(name, @func);
+		return func;
+	}
 
 	BlobCharacter(CBlob@ owner, string name)
 	{

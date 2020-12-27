@@ -1,4 +1,5 @@
 #include "MapsCore"
+#include "FireCommon"
 
 void onInit(CMap@ this)
 {
@@ -64,6 +65,19 @@ void TrySpawnBlob()
 		SetRandomKnightHelm(blob);
 
 		@blob = server_CreateBlob("bush", 0, Vec2f(144, 579));
-		addCharacterToBlob(blob, "Soren the bush", "Soren.cfg");
+		BlobCharacter@ char = addCharacterToBlob(blob, "Soren the bush", "Soren.cfg");
+
+		char.AddFunction("self combust", Fireeee);
 	}
+}
+
+// This is the blob with BlobCharacter, caller is our local player
+void Fireeee(CBlob@ this, CBlob@ caller)
+{
+	if (!this.hasScript("FireAnim.as"))
+		this.AddScript("FireAnim.as");
+
+
+	this.Tag("burning");
+	this.Sync("burning", true);
 }
