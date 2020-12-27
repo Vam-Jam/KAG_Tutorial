@@ -268,6 +268,7 @@ mixin class Character
 			else if (action == "S_")
 			{
 				WriteSpeed = parseInt(content);
+				chars = "";
 			}
 			else if (action == "R_")
 			{
@@ -284,8 +285,7 @@ mixin class Character
 
 			TextRenderLength += 2 + action.length + content.length;
 		}
-		
-		if (chars != ' ' && !skip) // TODO -> Set custom audio and sort out what we are doing with audio
+		else if (chars != ' ' && !skip) // TODO -> Set custom audio and sort out what we are doing with audio
 		{
 			Sound::Play("Archer_blip" + (XORRandom(1) == 0 ? "_2" : ""));
 		}

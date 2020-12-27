@@ -72,12 +72,22 @@ void TrySpawnBlob()
 }
 
 // This is the blob with BlobCharacter, caller is our local player
+// temp to soren bush
 void Fireeee(CBlob@ this, CBlob@ caller)
 {
 	if (!this.hasScript("FireAnim.as"))
 		this.AddScript("FireAnim.as");
 
+	ParticleZombieLightning(this.getPosition());
 
 	this.Tag("burning");
 	this.Sync("burning", true);
+
+	// Force fire to show up, the reason for this is because fireanim doesnt tick all too often
+	CSpriteLayer@ fire = this.getSprite().getSpriteLayer("fire_animation_large");
+	if (fire !is null)
+	{
+		fire.SetVisible(true);
+		fire.SetAnimation("smallfire");
+	}
 }
