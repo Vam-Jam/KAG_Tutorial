@@ -164,9 +164,11 @@ mixin class Character
 		}
 	}
 
-	// Called when user interacts with said target
+	// Temp bind with buttons
 	void ButtonPress() 
 	{
+		ResetTalkVars();
+		ClearResponseQueue();
 		AddToResponseQueue(NextInteractKey);
 	}
 
