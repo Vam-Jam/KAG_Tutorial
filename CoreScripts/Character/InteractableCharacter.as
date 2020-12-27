@@ -17,7 +17,9 @@ void onInit(CBlob@ this)
 void GetButtonsFor(CBlob@ this, CBlob@ caller)
 {
 	// Unsure if this can even go null
-	if (caller is null || this.hasTag("dead"))
+	BlobCharacter@ char = getCharacter(this);
+
+	if (caller is null || this.hasTag("dead") || char is null || char.CurrentlyInteracting)
 		return;
 
 	CButton@ button = caller.CreateGenericButton("$trade$", Vec2f_zero, this, TryingToTalk, "Test");
