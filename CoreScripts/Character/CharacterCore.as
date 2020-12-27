@@ -29,9 +29,9 @@ mixin class Character
 	//     - Used to know if text is done updating
 	bool FinishedWriting = false;
 
-	// Is the client done talking to us?
+	// We are interacting with a player
 	//     - Used to end talking to the character (gui goes bye)
-	bool FinishedTalking = false;
+	bool CurrentlyInteracting = false;
 
 	// CurrentRenderOutput Total length including special tokens that are not outputted
 	//     - Used when updating text so we can grab the correct substr
@@ -113,8 +113,8 @@ mixin class Character
 
 	void ResetTalkVars()
 	{
+		CurrentlyInteracting = false;
 		FinishedWriting = false;
-		FinishedTalking = false;
 		TextRenderLength = 0;
 		WriteSpeed = 1;
 		CurrentRenderOutput = "";
@@ -168,13 +168,17 @@ mixin class Character
 	// Temp bind with buttons
 	void ButtonPress() 
 	{
-		ResetTalkVars();
+		if (!CurrentlyInteracting)
+		{
+			ResetTalkVars();
+			CurrentlyInteracting = true;
+		}
 	}
 
 	void Update()
 	{
 		CBlob@ blob = getLocalPlayerBlob();
-		if (blob is null || FinishedTalking) 
+		if (blob is null || !CurrentlyInteracting) 
 			return;	
 
 
@@ -196,7 +200,7 @@ mixin class Character
 			else
 			{
 				// User stops talking, gui closes
-				FinishedTalking = true;
+				CurrentlyInteracting = false;
 			}
 		}
 		else

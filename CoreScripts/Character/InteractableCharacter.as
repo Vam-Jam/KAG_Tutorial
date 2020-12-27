@@ -27,10 +27,6 @@ void TryingToTalk(CBlob@ this, CBlob@ caller)
 {
 	BlobCharacter@ char = getCharacter(this);
 	char.ButtonPress();
-
-	CBitStream cbs = CBitStream();
-	cbs.write_u16(this.getNetworkID());
-	getRules().SendCommand(getRules().getCommandID("character_force_talk"), cbs);
 }
 
 

@@ -18,9 +18,6 @@ void onInit(CRules@ this)
 	// This will be called when a blob dies
 	// This is required unless you want the game to crash
 	this.addCommandID("character_unbound");
-	// This will force the current character to become 
-	// Current render target
-	this.addCommandID("character_force_talk");
 
 	onRestart(this);
 
@@ -100,13 +97,6 @@ void onCommand(CRules@ this, u8 cmd, CBitStream@ params)
 		}
 
 		Handler.RemoveCharacter(blob);
-	}
-	else if (cmd == this.getCommandID("character_force_talk"))
-	{
-		u16 networkId = params.read_u16();
-		CBlob@ blob = getBlobByNetworkID(networkId);
-
-		Handler.SetBlobToRender(blob);
 	}
 }
 

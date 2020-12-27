@@ -206,7 +206,7 @@ class BlobCharacterHandler
 		for (int a = 0; a < BlobList.length; a++)
 		{
 			BlobCharacter@ char = BlobList[a];
-			if (char !is null && char.CurrentText != "")
+			if (char !is null && char.CurrentlyInteracting)
 			{
 				@CharacterToRender = char;
 				return true;
@@ -225,7 +225,7 @@ class BlobCharacterHandler
 
 		CharacterToRender.Update();
 
-		if (CharacterToRender.FinishedTalking)
+		if (!CharacterToRender.CurrentlyInteracting)
 			@CharacterToRender = @null;
 	}
 
