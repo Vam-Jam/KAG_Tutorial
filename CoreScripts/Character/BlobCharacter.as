@@ -223,7 +223,7 @@ class BlobCharacterHandler
 		if (CharacterToRender is null && !FindAndSetToSpeak())
 			return;
 
-		CharacterToRender.Update();
+		CharacterToRender.CustomUpdate();
 
 		if (!CharacterToRender.CurrentlyInteracting)
 			@CharacterToRender = @null;
