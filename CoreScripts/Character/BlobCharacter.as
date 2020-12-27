@@ -218,8 +218,6 @@ class BlobCharacterHandler
 
 	void onTick()
 	{
-		UpdateScreenVars();
-
 		if (CharacterToRender is null && !FindAndSetToSpeak())
 			return;
 
@@ -227,12 +225,6 @@ class BlobCharacterHandler
 
 		if (!CharacterToRender.CurrentlyInteracting)
 			@CharacterToRender = @null;
-	}
-
-	void UpdateScreenVars()
-	{
-		SCREEN_HEIGHT = getDriver().getScreenHeight();
-		SCREEN_WIDTH = getDriver().getScreenWidth();
 	}
 
 	void onRender()

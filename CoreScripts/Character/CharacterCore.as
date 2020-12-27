@@ -1,12 +1,7 @@
 
 #include "EmotesCommon"
 
-int SCREEN_HEIGHT = 0;
-int SCREEN_WIDTH  = 0;
-
 const u16 KEYS_TO_TAKE = key_left | key_right | key_up | key_down | key_action1 | key_action2 | key_action3;
-
-
 
 mixin class Character 
 {
