@@ -113,7 +113,6 @@ mixin class Character
 
 	void ResetTalkVars()
 	{
-		CurrentlyInteracting = false;
 		FinishedWriting = false;
 		TextRenderLength = 0;
 		WriteSpeed = 1;
