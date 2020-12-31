@@ -1,3 +1,13 @@
+//////////////////////
+///
+/// CharacterCore
+///
+/// This holds the core class to character talking. 
+/// Currently not stable, everything is subject to change.
+/// 
+/// The class is a mixin, which means another class can inherit everything from it
+/// This is useful in this case so we can write less code
+
 
 #include "EmotesCommon"
 
@@ -204,7 +214,7 @@ mixin class Character
 		}
 	}
 
-	// TODO: Clean, fix some 'hacky/temp' stuff
+	// TODO: Clean up, its pretty ugly and prone to breaking (sorry)
 	void UpdateText(bool skip = false)
 	{
 		string chars = CurrentText.substr(TextRenderLength, 1);
@@ -228,7 +238,6 @@ mixin class Character
 		}
 		else if (chars == '{') // Emote/Custom text logic
 		{
-			// TODO -> Make more pretty?
 			string insides = "";
 
 			for (int a = TextRenderLength + 1; a < CurrentText.length; a++)
@@ -253,6 +262,7 @@ mixin class Character
 			string action = insides.substr(0, 2);
 			string content = insides.substr(2, insides.length);
 
+			// Emote (TODO: Move to BlobHandler)
 			if (action == "E_")
 			{
 				if (OwnerBlob is null)
@@ -260,16 +270,16 @@ mixin class Character
 				else
 					set_emote(OwnerBlob, Emotes::names.find(content));
 			}
-			else if (action == "S_")
+			else if (action == "S_") // Write speed
 			{
 				WriteSpeed = parseInt(content);
 				chars = "";
 			}
-			else if (action == "R_")
+			else if (action == "R_") // Add a new response to the queue 
 			{
 				AddToResponseQueue(content);
 			}
-			else if (action == "F_")
+			else if (action == "F_") // Execute a function (TODO: change funcdef for non blobs)
 			{
 				CallbackButtonFunc@ func = getFunction(content);
 				if (func is null)
@@ -288,18 +298,16 @@ mixin class Character
 		CurrentRenderOutput += chars;
 		TextRenderLength += chars.length;
 
-		// Need to fix (tokens excluding colours will make this invalid)
 		if (TextRenderLength == CurrentText.length)
 			FinishedWriting = true;
 	}
 
-	// TEMP
+	// TEMP, this was a gay temp work around
 	bool isSpecialChar(string input)
 	{
 		return (input == "{" || input == "}" || input == "$");
 	}
 
-	// Maybe set velocity to 0?
 	void LockMovement(CBlob@ blob)
 	{
 		blob.DisableKeys(KEYS_TO_TAKE);

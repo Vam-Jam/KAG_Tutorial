@@ -1,7 +1,10 @@
-// Simple rules logic script
-// No define required, localhost only, clients will be running this regardless
+////////////////////////////////////
+///
+/// Tutorial main
 
-// This whole script is incomplete, it will be ugly until then
+/// This is mostly a TEST script
+/// This just lets us load in and some other stuff
+/// Will revisit when it comes time to actually making a tutorial
 
 
 // TEMP

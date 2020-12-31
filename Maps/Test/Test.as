@@ -1,6 +1,9 @@
 //////////////////////
+///
 /// TEST MAP
-/// THIS CODE MAY OR MAY NOT WORK
+/// 
+/// This is a test with sector events.
+/// This may break in the future
 
 #include "EventSector"
 

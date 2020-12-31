@@ -1,8 +1,14 @@
 #include "CharacterCore"
 
-/// Characters but for blobs
-/// Add's stuff like names
-/// Character portrait/border
+//////////////////////
+///
+/// BlobCharacter
+///
+/// This class is attached to a blob that wants the Character class
+/// This lets us do special stuff with the blob class
+/// - Adding a potrait based on the head currently equiped
+/// - Emoting
+/// And some other stuff that i forgot about
 
 class BlobCharacter : Character
 {

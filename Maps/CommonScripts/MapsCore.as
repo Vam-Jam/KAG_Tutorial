@@ -1,3 +1,7 @@
+//////////////////////
+///
+/// MapsCore
+///
 /// Used so there's less duplicate code with adding a map level
 
 #include "BlobCharacter"
@@ -106,6 +110,10 @@ BlobCharacter@ addCharacterToBlob(CBlob@ blob, string &in characterName, string 
 }
 
 
+
+/// TODO: MOVE TO A NEW FILE
+
+
 // Basic 0 to 255        (70 heads)
 // Flags 256 to 511      (78 heads)
 // Fantasy 512 to 767    (18 heads)
@@ -136,24 +144,4 @@ void SetRandomKnightHelm(CBlob@ blob)
 {
 	blob.setHeadNum(Heads::KNIGHT_WITH_HELMS[XORRandom(Heads::KNIGHT_WITH_HELMS.length)]);
 	LoadHead(blob.getSprite(), blob.getHeadNum());
-	/*switch(XORRandom(10))
-	{
-		// DLC 1
-		case 0:
-			
-		break;
-
-		// DLC 2
-		case 1:
-		break;
-
-		// DLC 3
-		case 2:
-
-		break;
-
-		default:
-			//blob.setHeadNum(1);
-		break;
-	}*/
 }

@@ -1,4 +1,9 @@
-/// This script handles how we can interact with a class (by using buttons currently)
+//////////////////////
+///
+/// InteractableCharacter
+///
+/// This is added to any new blob when used with MapsCore addCharacterToBlob
+/// Code in this is subject to change, buttons were used just as a quick and simple way to test the code
 
 // TODO -> Create Token
 

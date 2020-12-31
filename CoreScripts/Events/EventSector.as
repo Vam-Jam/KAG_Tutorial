@@ -1,4 +1,10 @@
 
+//////////////////////
+///
+/// EventSectors
+///
+/// This script will allow you to set up sectors and do events
+/// Check Test.as for use examples
 
 #include "EventCore"
 

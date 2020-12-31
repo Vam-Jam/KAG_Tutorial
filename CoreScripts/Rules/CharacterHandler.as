@@ -1,13 +1,15 @@
+//////////////////////
+///
+/// CharacterHandler
+///
+/// This script is added into gamemode.cfg
+/// It handles rendering, ticking and clearing BlobCharacterHandler
+/// This may change later on, as I'd like this to render all other 'Character' type classes (if we ever do that)
+
 #include "BlobCharacter"
 #include "RunnerTextures"
 
 BlobCharacterHandler@ Handler;
-
-Vertex[] PortraitVertex;
-int id = 0;
-
-const string temp_texture_name = "ok_cool";
-const string texture_head = "ok_not_cool";
 
 // In localhost, this executes before CMap onInit does
 void onInit(CRules@ this)

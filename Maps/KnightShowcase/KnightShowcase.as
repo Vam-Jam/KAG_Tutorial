@@ -1,3 +1,10 @@
+//////////////////////
+///
+/// KnightShowcase map
+/// 
+/// This is a test level with blobs talking
+/// Will clean when everything becomes more stable
+
 #include "MapsCore"
 #include "FireCommon"
 
