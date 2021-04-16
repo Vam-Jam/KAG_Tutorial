@@ -144,12 +144,12 @@ mixin class Character
 		}
 
 		// Optional
-		if (cf.exists("main")) 
+		if (cf.exists("start")) 
 		{
-			string main = cf.read_string("main");
+			string sentence = cf.read_string("start");
 			
-			AddResponse("main", main);
-			AddToResponseQueue("main");
+			AddResponse("start", sentence);
+			AddToResponseQueue("start");
 		}
 
 		// Optional

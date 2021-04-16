@@ -107,3 +107,8 @@ void onRender(CRules@ this)
 	if (Handler !is null)
 		Handler.onRender();
 }
+
+
+
+
+//void StartDebug()
