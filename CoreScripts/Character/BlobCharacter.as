@@ -1,4 +1,4 @@
-#include "CharacterCore"
+#include "CharacterMixin"
 
 //////////////////////
 ///

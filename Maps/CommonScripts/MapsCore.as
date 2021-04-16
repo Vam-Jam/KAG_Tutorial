@@ -88,13 +88,13 @@ bool AddSpawnsCosmeticOnly(CMap@ map, string markerName, string blobToSpawn, int
 
 BlobCharacter@ addCharacterToBlob(CBlob@ blob, string &in characterName, string &in textFile)
 {
-	if (blob.hasScript("InteractableCharacter"))
+	if (blob.hasScript("BlobCharacterAddon"))
 	{
-		error("Trying to add a script to a blob that already has InteractableCharacter.as");
+		error("Trying to add a script to a blob that already has BlobCharacterAddon.as");
 		return null;
 	}
 
-	blob.AddScript("InteractableCharacter");
+	blob.AddScript("BlobCharacterAddon");
 
 	BlobCharacter@ character = BlobCharacter(blob, characterName);
 	character.LoadTextConfig(textFile);
