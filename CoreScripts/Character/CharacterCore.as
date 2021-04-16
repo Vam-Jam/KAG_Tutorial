@@ -49,6 +49,9 @@ mixin class Character
 	// The whole text that is being written to ^
 	string CurrentText = "";
 
+	// Last loaded config file (for automatic debug reloading)
+	string LastTextConfig = "";
+
 	void SetName(string name)
 	{
 		CharacterName = name;
@@ -143,6 +146,8 @@ mixin class Character
 			return;
 		}
 
+		LastTextConfig = configName;
+
 		// Optional
 		if (cf.exists("start")) 
 		{
@@ -167,6 +172,12 @@ mixin class Character
 					AddResponse(configKeys[a], text);
 			}
 		}
+	}
+
+	void ReloadTextFromConfig()
+	{
+		ClearResponseQueue();
+		LoadTextConfig(LastTextConfig);
 	}
 
 	// Temp bind with buttons

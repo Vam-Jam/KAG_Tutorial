@@ -9,7 +9,7 @@
 #include "BlobCharacter"
 #include "RunnerTextures"
 
-BlobCharacterHandler@ Handler;
+BlobCharacterHandler Handler;
 
 // In localhost, this executes before CMap onInit does
 void onInit(CRules@ this)
@@ -20,6 +20,8 @@ void onInit(CRules@ this)
 	// This will be called when a blob dies
 	// This is required unless you want the game to crash
 	this.addCommandID("character_unbound");
+	// Reloads all blob configs
+	this.addCommandID("DebugReloadConfigs");
 
 	onRestart(this);
 
@@ -32,7 +34,7 @@ void onRestart(CRules@ this)
 	if (Handler !is null) 
 		Handler.Clear();
 
-	@Handler = BlobCharacterHandler();
+	Handler = BlobCharacterHandler();
 }
 
 void onReload(CRules@ this)
@@ -40,26 +42,9 @@ void onReload(CRules@ this)
 	if (Handler !is null) 
 		Handler.Clear();
 
-	@Handler = BlobCharacterHandler();
+	Handler = BlobCharacterHandler();
 
-	// Only for reloads
-	CBlob@[] blobs;
-	getBlobs(@blobs);
-
-	for (int a = 0; a < blobs.length; a++)
-	{
-		CBlob@ blob = blobs[a];
-		if (blob is null)
-			continue;
-
-		BlobCharacter@ char = getCharacter(blob);
-
-		if (char is null)
-			continue;
-
-		Handler.AddCharacter(char);
-	}
-	// End
+	ReloadCharacters(this);
 }
 
 void onTick(CRules@ this)
@@ -70,7 +55,6 @@ void onTick(CRules@ this)
 
 void onCommand(CRules@ this, u8 cmd, CBitStream@ params)
 {
-
 	if (Handler is null)
 		return;
 
@@ -100,6 +84,10 @@ void onCommand(CRules@ this, u8 cmd, CBitStream@ params)
 
 		Handler.RemoveCharacter(blob);
 	}
+	else if (cmd == this.getCommandID("DebugReloadConfigs"))
+	{
+		ReloadCharacters(this);
+	}
 }
 
 void onRender(CRules@ this)
@@ -108,7 +96,22 @@ void onRender(CRules@ this)
 		Handler.onRender();
 }
 
+void ReloadCharacters(CRules@ this)
+{
+	CBlob@[] blobs;
+	getBlobs(@blobs);
 
+	for (int a = 0; a < blobs.length; a++)
+	{
+		CBlob@ blob = blobs[a];
+		if (blob is null)
+			continue;
 
+		BlobCharacter@ char = getCharacter(blob);
 
-//void StartDebug()
+		if (char is null)
+			continue;
+
+		char.ReloadTextFromConfig();
+	}
+}
