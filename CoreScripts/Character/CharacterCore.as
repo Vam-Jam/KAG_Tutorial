@@ -176,6 +176,7 @@ mixin class Character
 
 	void ReloadTextFromConfig()
 	{
+		ResetTalkVars();
 		ClearResponseQueue();
 		LoadTextConfig(LastTextConfig);
 	}
@@ -195,7 +196,6 @@ mixin class Character
 		CBlob@ blob = getLocalPlayerBlob();
 		if (blob is null || !CurrentlyInteracting) 
 			return;	
-
 
 		LockMovement(blob);
 		bool spacebarPressed = ClientInputs();

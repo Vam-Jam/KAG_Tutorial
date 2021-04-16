@@ -98,6 +98,9 @@ void onRender(CRules@ this)
 
 void ReloadCharacters(CRules@ this)
 {
+	Handler.Clear();
+
+	
 	CBlob@[] blobs;
 	getBlobs(@blobs);
 
@@ -113,5 +116,7 @@ void ReloadCharacters(CRules@ this)
 			continue;
 
 		char.ReloadTextFromConfig();
+
+		Handler.AddCharacter(char);
 	}
 }

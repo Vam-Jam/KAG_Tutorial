@@ -212,6 +212,7 @@ class BlobCharacterHandler
 		for (int a = 0; a < BlobList.length; a++)
 		{
 			BlobCharacter@ char = BlobList[a];
+
 			if (char !is null && char.CurrentlyInteracting)
 			{
 				@CharacterToRender = char;
@@ -226,11 +227,11 @@ class BlobCharacterHandler
 	{
 		if (CharacterToRender is null && !FindAndSetToSpeak())
 			return;
-
+		
 		CharacterToRender.CustomUpdate();
 
 		if (!CharacterToRender.CurrentlyInteracting)
-			@CharacterToRender = @null;
+			@CharacterToRender = null;
 	}
 
 	void onRender()
