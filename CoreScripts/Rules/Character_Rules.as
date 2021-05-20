@@ -20,8 +20,13 @@ void onInit(CRules@ this)
 	// This will be called when a blob dies
 	// This is required unless you want the game to crash
 	this.addCommandID("character_unbound");
+	
+	///// TEMP
+	
 	// Reloads all blob configs
 	this.addCommandID("DebugReloadConfigs");
+	// Toggles Pathfinding
+	this.addCommandID("TogglePathfinding");
 
 	onRestart(this);
 

@@ -147,13 +147,25 @@ void onReload(CRules@ this)
             false
         );
 
+        Label pathfindingText = Label(
+            Vec2f(10, 75),
+            Vec2f(200, 25),
+            "- Pathfinding stuff",
+            Options_NoHoveredColor,
+            false
+        );
+
         goBack.addClickListener(GoBack_onClick);
 
         reloadText.addHoverStateListener(LabelColor_onHover);
         reloadText.addClickListener(ReloadBlobConfigs_onClick);
+        
+        pathfindingText.addHoverStateListener(LabelColor_onHover);
+        pathfindingText.addClickListener(TogglePathfinding_onClick);
 
         Settings.addChild(goBack);
         Settings.addChild(reloadText);
+        Settings.addChild(pathfindingText);
     }
 
 }
@@ -247,4 +259,9 @@ void ServerSettings_onClick(int x, int y, int button, IGUIItem@ source)
 void ReloadBlobConfigs_onClick(int x, int y, int button, IGUIItem@ source)
 {
     getRules().SendCommand(getRules().getCommandID("DebugReloadConfigs"), CBitStream());
+}
+
+void TogglePathfinding_onClick(int x, int y, int button, IGUIItem@ source)
+{
+    getRules().SendCommand(getRules().getCommandID("TogglePathfinding"), CBitStream());
 }
