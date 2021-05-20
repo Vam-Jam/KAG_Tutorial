@@ -35,7 +35,7 @@ void onRestart(CRules@ this)
 	getMap().RemoveAllSectors();
 
 	RegisterFileExtensionScript("Scripts/MapLoaders/LoadPNGMap.as", "png");
-	AddMapScript();
+	AddMapScripts();
 
 	RespawnAll(this);
 }
@@ -51,13 +51,17 @@ void RespawnAll(CRules@ this)
 	}
 }
 
-void AddMapScript()
+void AddMapScripts()
 {
 	string[] name = getMap().getMapName().split('/');
 	string mapName = name[name.length() - 1];
 	mapName = mapName.substr(0,mapName.length() - 4);
 
-	getMap().AddScript(mapName);
+	if (CFileMatcher(mapName).hasMatch())
+		getMap().AddScript(mapName);
+
+	if (CFileMatcher(mapName + "_rules").hasMatch())
+		getRules().AddScript(mapName + "_rules");
 }
 
 void onNewPlayerJoin( CRules@ this, CPlayer@ player )

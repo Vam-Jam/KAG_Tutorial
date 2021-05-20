@@ -17,6 +17,9 @@ class SectorEvent : Event
 	// want sectors to go when a blob despawns randomly
 	u16 Id = 0; 
 
+
+	// TODO: Check if topLeft & topRight are in wrong places (otherwise barrier wont spawn)
+
 	SectorEvent(EventFunc@ mainEvent, PreEventCheck@ checkEvent, Vec2f topLeft, Vec2f botRight, bool removeAfterUse = true)
 	{
 		@EventSector = getMap().server_AddSector(topLeft, botRight, Id + '');

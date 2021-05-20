@@ -9,20 +9,21 @@
 
 SectorHandler handler;
 
-bool ENABLE_HUD = false;
-
 void onInit(CMap@ this)
 {
-	onRulesRestart(this, null);
+	onRulesRestart(this, getRules());
 }
 
 void onRulesRestart(CMap@ this, CRules@ rules)
 {
 	handler = SectorHandler();
 
-	/*handler.AddNewEvent(
-		SectorEvent(HelloWorld, Vec2f(95, 419), Vec2f(184, 471), true)
-	);*/
+	handler.AddNewEvent(
+		SectorEvent(FirstSpawnIn, Vec2f(161, 687),  Vec2f(0, 621), false)
+	);
+
+
+	rules.set_bool("DisableHud", true);
 }
 
 void onTick(CMap@ this)
@@ -31,6 +32,26 @@ void onTick(CMap@ this)
 
 	if (handler is null || blob is null)
 		return;
-		
+
 	handler.OnTick(blob);
+}
+
+
+
+
+/// Callbacks
+
+
+//
+void FirstSpawnIn(CBlob@ caller)
+{
+	CSprite@ sprite = caller.getSprite();
+
+	if (sprite is null)
+		return;
+
+	// TODO: getScripts() func
+	sprite.RemoveScript(caller.getName()+"HUD");
+	sprite.RemoveScript("RunnerHoverHUD");
+	sprite.RemoveScript("DefaultActorHUD");
 }
