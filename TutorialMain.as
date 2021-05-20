@@ -32,8 +32,8 @@ void onInit(CRules@ this)
 
 void onRestart(CRules@ this)
 {
-	this.RemoveAllSectors();
-	
+	getMap().RemoveAllSectors();
+
 	RegisterFileExtensionScript("Scripts/MapLoaders/LoadPNGMap.as", "png");
 	AddMapScript();
 
